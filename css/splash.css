@@ -1,0 +1,151 @@
+/* ===========================
+   KYLRO - Entrada ao abrir o site
+   Só opacidade e transform são animados (o navegador faz isso na placa de vídeo,
+   sem redesenhar a tela a cada quadro), para a animação ficar lisa.
+   =========================== */
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  /* roxo profundo da carteira (quase opaco, dispensa desfocar a página por trás) */
+  background: radial-gradient(120% 90% at 50% 40%, #2a0870 0%, #15033c 60%, #0c0124 100%);
+  opacity: 0;
+  will-change: opacity;
+  contain: strict;
+}
+/* abertura do site: o mesmo roxo cobre a tela desde o primeiro quadro,
+   para o Dashboard não "piscar" antes da entrada; sai quando a entrada começa a se dissolver */
+html.kylro-abertura::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: radial-gradient(120% 90% at 50% 40%, #2a0870 0%, #15033c 60%, #0c0124 100%);
+}
+
+/* fica montada e pronta, mas invisível e sem receber cliques */
+.splash[hidden] { visibility: hidden; }
+/* pré-aquecimento: desenhada uma vez, quase transparente, logo após a página carregar */
+.splash.aquecendo { visibility: visible; opacity: .001; pointer-events: none; }
+.splash.aquecendo .splash-brilho,
+.splash.aquecendo .splash-marca span,
+.splash.aquecendo .splash-frase { opacity: 1; }
+.splash.aquecendo .splash-linha { transform: scaleX(1); }
+
+/* brilho suave atrás da marca, nas cores do gráfico */
+.splash-brilho {
+  position: absolute;
+  width: min(680px, 130vw);
+  aspect-ratio: 1;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, .34) 0%, rgba(59, 155, 255, .1) 36%, rgba(59, 155, 255, 0) 66%);
+  opacity: 0;
+  transform: translate(-50%, -55%) scale(.85);
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+.splash-conteudo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  will-change: opacity, transform;
+}
+
+/* marca: cada letra sobe e aparece, uma depois da outra */
+.splash-marca {
+  display: flex;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(46px, 11vw, 84px);
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: .14em;
+  margin-right: -.14em; /* compensa o espaço depois da última letra */
+  text-shadow: 0 0 24px rgba(167, 139, 250, .4);
+}
+.splash-marca span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(22px) scale(.96);
+  will-change: opacity, transform;
+}
+
+/* linha fina que se desenha do centro para as pontas (roxo → azul do gráfico) */
+.splash-linha {
+  display: block;
+  width: min(260px, 60vw);
+  height: 2px;
+  margin-top: 26px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0), #8b5cf6 20%, #3b9bff 80%, rgba(59, 155, 255, 0));
+  transform: scaleX(0);
+  will-change: transform;
+}
+
+.splash-frase {
+  margin-top: 22px;
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(15px, 3.6vw, 21px);
+  font-weight: 400;
+  letter-spacing: .02em;
+  color: #e4dcff;
+  opacity: 0;
+  transform: translateY(12px);
+  will-change: opacity, transform;
+}
+.splash-frase strong {
+  font-weight: 600;
+  background: linear-gradient(90deg, #c7a7ff, #8fc7ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- linha do tempo (começa quando a classe .ativa entra) ---------- */
+/* curva "ease-out" longa: começa decidida e pousa suavemente */
+.splash.ativa { animation: splash-entra .8s cubic-bezier(.16, 1, .3, 1) forwards; }
+.splash.ativa .splash-brilho { animation: splash-brilho 3.4s cubic-bezier(.33, 1, .68, 1) .15s forwards; }
+.splash.ativa .splash-marca span {
+  animation: splash-letra 1.1s cubic-bezier(.16, 1, .3, 1) forwards;
+  animation-delay: calc(.3s + var(--i) * .08s);
+}
+.splash.ativa .splash-linha { animation: splash-linha 1.1s cubic-bezier(.65, 0, .35, 1) 1.05s forwards; }
+.splash.ativa .splash-frase { animation: splash-frase 1.2s cubic-bezier(.16, 1, .3, 1) 1.4s forwards; }
+
+/* saída: tudo sobe levemente e se dissolve */
+.splash.saindo { animation: splash-sai .8s cubic-bezier(.65, 0, .35, 1) forwards; }
+.splash.saindo .splash-conteudo { animation: splash-conteudo-sai .8s cubic-bezier(.65, 0, .35, 1) forwards; }
+
+@keyframes splash-entra { from { opacity: 0; } to { opacity: 1; } }
+@keyframes splash-sai { from { opacity: 1; } to { opacity: 0; } }
+@keyframes splash-letra { to { opacity: 1; transform: none; } }
+@keyframes splash-linha { to { transform: scaleX(1); } }
+@keyframes splash-frase { to { opacity: 1; transform: none; } }
+@keyframes splash-brilho {
+  0%   { opacity: 0;   transform: translate(-50%, -55%) scale(.85); }
+  50%  { opacity: 1;   transform: translate(-50%, -55%) scale(1); }
+  100% { opacity: .8;  transform: translate(-50%, -55%) scale(1.05); }
+}
+@keyframes splash-conteudo-sai {
+  to { opacity: 0; transform: translateY(-16px) scale(.985); }
+}
+
+/* quem prefere menos movimento vê só um esmaecer simples */
+@media (prefers-reduced-motion: reduce) {
+  .splash.ativa .splash-marca span,
+  .splash.ativa .splash-frase,
+  .splash.ativa .splash-linha { animation-duration: .01s; animation-delay: 0s; }
+  .splash.ativa .splash-brilho { animation: none; opacity: .7; }
+  .splash.saindo .splash-conteudo { animation: none; }
+}

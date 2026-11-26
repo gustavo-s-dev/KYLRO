@@ -1,0 +1,247 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #260064;
+  --card: #39116d;
+  --roxo: #a020f0;
+  --texto: #ffffff;
+  --suave: #b8a0e8;
+  --desc: #cbb4f5;
+  --vermelho: #ff5c70;
+}
+
+html, body { min-height: 100%; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--texto);
+}
+
+button { font-family: inherit; color: inherit; border: none; background: none; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+/* os ícones vindos de img/ já trazem as próprias cores */
+.ic, .seta, .modal-ic { display: block; flex-shrink: 0; }
+
+/* ===== PÁGINA ===== */
+.config {
+  max-width: 751px;
+  margin: 0 auto;
+  padding: 13px 23px 40px 31px;
+}
+
+/* ===== TOPO ===== */
+.topo {
+  display: flex;
+  align-items: flex-start;
+  margin-left: -12px;
+}
+
+.back {
+  color: var(--roxo);
+  display: flex;
+  transition: transform .2s;
+}
+.back svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.back:hover { transform: translateX(-4px); }
+
+.titulo {
+  margin-left: 26px;
+  margin-top: 3px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.sub {
+  margin-left: 26px;
+  margin-top: 16px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--suave);
+}
+
+/* ===== OPÇÕES ===== */
+.opcoes {
+  margin-top: 21px;
+  display: flex;
+  flex-direction: column;
+  gap: 6.7px;
+}
+
+.opcao {
+  background: var(--card);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.opcao-topo {
+  position: relative;
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 4px 21px 0 38px;
+  text-align: left;
+  transition: background .2s;
+}
+.opcao-topo:hover { background: rgba(255, 255, 255, .03); }
+.opcao-topo:focus-visible { outline: 2px solid var(--desc); outline-offset: -2px; border-radius: 6px; }
+
+/* ícones: tamanho e posição de cada um como no layout */
+.ic { position: absolute; left: 11px; top: 17px; }
+/* (posição medida a partir do topo do cartão; o padding-top acima não afeta ícones absolutos) */
+.ic-perfil       { width: 19px; height: 19px; left: 7px;  top: 18px; }
+.ic-seguranca    { width: 14px; height: 17px; top: 18px; }
+.ic-notificacoes { width: 21px; height: 21px; left: 9px; }
+.ic-aparencia    { width: 18px; height: 18px; }
+.ic-idioma       { width: 17px; height: 17px; top: 18px; }
+.ic-sobre        { width: 15px; height: 15px; top: 19px; }
+.ic-ajuda        { width: 15px; height: 15px; top: 20px; }
+.ic-sair         { width: 18px; height: 18px; }
+
+.opcao-txt {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.opcao-nome {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.opcao-desc {
+  margin-top: 2px;
+  margin-left: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--desc);
+}
+
+.seta {
+  width: 18px;
+  height: 18px;
+  margin-left: 16px;
+  transition: transform .3s;
+}
+.opcao-topo[aria-expanded="true"] .seta { transform: rotate(90deg); }
+
+/* ===== PAINEL (abre abaixo, como um FAQ) ===== */
+.painel {
+  padding: 2px 21px 18px 40px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--desc);
+  animation: abrir .25s ease;
+}
+
+.painel p { max-width: 560px; }
+
+.painel ul {
+  list-style: none;
+  margin-top: 12px;
+  border-top: 1px solid rgba(203, 180, 245, .15);
+}
+
+.painel li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(203, 180, 245, .1);
+}
+.painel li:last-child { border-bottom: none; padding-bottom: 0; }
+.painel li strong { color: var(--texto); font-weight: 600; text-align: right; }
+
+@keyframes abrir {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ===== MODAL SAIR ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 0, 40, .7);
+  animation: aparecer .2s ease;
+}
+.modal[hidden] { display: none; }
+
+.modal-caixa {
+  width: 100%;
+  max-width: 340px;
+  background: var(--card);
+  border-radius: 12px;
+  padding: 28px 24px 22px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+  animation: subir .25s ease;
+}
+
+.modal-ic { width: 36px; height: 36px; margin: 0 auto; }
+
+.modal-titulo {
+  margin-top: 16px;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.modal-texto {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--desc);
+  line-height: 1.5;
+}
+
+.modal-botoes {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 42px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: filter .2s;
+}
+.modal-btn:hover { filter: brightness(1.12); }
+.modal-btn.cancelar { background: rgba(255, 255, 255, .08); color: var(--texto); }
+.modal-btn.confirmar { background: var(--vermelho); color: #fff; }
+.modal-btn:disabled { cursor: default; filter: none; opacity: .8; }
+
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes subir { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 600px) {
+  .config { padding: 16px 16px 32px; }
+  .topo { margin-left: -2px; }
+  .titulo, .sub { margin-left: 16px; }
+  .opcao-topo { padding-right: 16px; }
+  .painel { padding-left: 38px; padding-right: 16px; }
+  .painel li { flex-direction: column; gap: 2px; }
+  .painel li strong { text-align: left; }
+}
+
+@media (max-width: 360px) {
+  .opcao-nome { font-size: 15.5px; }
+}

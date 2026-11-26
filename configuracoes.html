@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYLRO | Configurações</title>
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#4c0fd0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/configuracoes.css">
+</head>
+<body>
+  <main class="config">
+
+    <header class="topo">
+      <a href="index.html" class="back" aria-label="Voltar para o início">
+        <svg viewBox="0 0 24 24"><path d="M22 12H3"/><path d="M12 3l-9 9 9 9"/></svg>
+      </a>
+      <div>
+        <h1 class="titulo">Configurações</h1>
+        <p class="sub">Personalize sua experiência</p>
+      </div>
+    </header>
+
+    <section class="opcoes" id="opcoes">
+
+      <article class="opcao">
+        <button type="button" class="opcao-topo" aria-expanded="false" aria-controls="painel-perfil">
+          <!-- img/usuario 2.svg --><svg class="ic ic-perfil" viewBox="0 0 26 26" fill="none" aria-hidden="true"><path d="M12.9993 0.5C9.50077 0.5 6.63488 3.28531 6.63488 6.75753C6.63488 8.98927 7.81881 10.9372 9.59369 12.0443C4.62117 13.5467 0.937379 18.2233 0.50667 23.497C0.413388 24.6391 1.34994 25.5 2.39283 25.5H23.6077C24.6506 25.5 25.5871 24.6391 25.4938 23.497C25.0631 18.2229 21.3787 13.5458 16.4056 12.0439C18.1801 10.9368 19.3638 8.98896 19.3638 6.75753C19.3638 3.28531 16.4979 0.5 12.9993 0.5ZM8.56349 6.75753C8.56349 4.38123 10.5331 2.4254 12.9993 2.4254C15.4656 2.4254 17.4352 4.38123 17.4352 6.75753C17.4352 9.13385 15.4656 11.0897 12.9993 11.0897C10.5331 11.0897 8.56349 9.13385 8.56349 6.75753ZM3.57406 23.5746C2.96234 23.5746 2.47823 23.0481 2.59494 22.4476C3.56394 17.4622 7.89406 13.4662 13.0003 13.4662C18.1065 13.4662 22.4366 17.4622 23.4056 22.4476C23.5222 23.0481 23.0382 23.5746 22.4265 23.5746H3.57406Z" fill-rule="evenodd" clip-rule="evenodd" fill="#C026FF" stroke="#C026FF"/></svg>
+          <span class="opcao-txt">
+            <span class="opcao-nome">Perfil</span>
+            <span class="opcao-desc">Gerencie suas informações</span>
+          </span>
+          <!-- img/seta config.svg --><svg class="seta" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M20.8353 11.0662L13.9247 2.0587L15.4098 0L25 12.5L15.4098 25L13.9247 22.9414L20.8353 13.9339H0V11.0662H20.8353Z" fill-rule="evenodd" clip-rule="evenodd" fill="#CBB4F5"/></svg>
+        </button>
+        <div class="painel" id="painel-perfil" role="region" hidden>
+          <p>Aqui ficam os seus dados na KYLRO: nome, e-mail, telefone e foto de perfil. Mantenha tudo atualizado para receber avisos importantes sobre a sua carteira e agilizar a verificação da sua conta.</p>
+          <ul>
+            <li><span>Nome</span><strong>Pedro</strong></li>
+            <li><span>Conta</span><strong>Verificada</strong></li>
+            <li><span>Membro desde</span><strong>2025</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="opcao">
+        <button type="button" class="opcao-topo" aria-expanded="false" aria-controls="painel-seguranca">
+          <!-- img/seguranca.svg --><svg class="ic ic-seguranca" viewBox="0 0 19 23" fill="none" aria-hidden="true"><path d="M9.375 2.1875C12.1354 2.96875 15.1562 3.90625 16.6667 4.42708V12.6042C16.6667 14.375 14.7396 17.5 9.375 20.625C4.01042 17.4479 2.08333 14.375 2.08333 12.6042V4.42708C3.59375 3.85417 6.61458 2.96875 9.375 2.1875ZM9.375 0C9.375 0 0 2.65625 0 3.125V12.6042C0 17.3958 6.92708 21.6146 8.85417 22.7604C9.00833 22.8634 9.18959 22.9184 9.375 22.9184C9.56041 22.9184 9.74166 22.8634 9.89583 22.7604C11.875 21.6667 18.75 17.3958 18.75 12.6042V3.125C18.75 2.65625 9.375 0 9.375 0Z" fill="#C026FF"/><path d="M7.08335 14.2708L4.47918 11.7188C4.29872 11.5343 4.18929 11.292 4.17023 11.0347C4.15116 10.7773 4.2237 10.5215 4.37501 10.3125C4.45932 10.187 4.57126 10.0824 4.70226 10.0069C4.83326 9.9314 4.97982 9.8869 5.13069 9.87684C5.28156 9.86678 5.43273 9.89143 5.5726 9.9489C5.71246 10.0064 5.83729 10.0951 5.93751 10.2083L7.81251 12.0833L12.8125 7.08333C13.0131 6.93289 13.2612 6.85985 13.5114 6.87762C13.7615 6.8954 13.9968 7.0028 14.1741 7.1801C14.3514 7.3574 14.4588 7.59271 14.4766 7.84283C14.4943 8.09294 14.4213 8.34107 14.2708 8.54167L8.54168 14.2708C8.44898 14.3719 8.33629 14.4525 8.21077 14.5077C8.08525 14.5629 7.94963 14.5914 7.81251 14.5914C7.6754 14.5914 7.53978 14.5629 7.41425 14.5077C7.28873 14.4525 7.17605 14.3719 7.08335 14.2708Z" fill="#C026FF"/></svg>
+          <span class="opcao-txt">
+            <span class="opcao-nome">Segurança</span>
+            <span class="opcao-desc">Proteja sua conta</span>
+          </span>
+          <!-- img/seta config.svg --><svg class="seta" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M20.8353 11.0662L13.9247 2.0587L15.4098 0L25 12.5L15.4098 25L13.9247 22.9414L20.8353 13.9339H0V11.0662H20.8353Z" fill-rule="evenodd" clip-rule="evenodd" fill="#CBB4F5"/></svg>
+        </button>
+        <div class="painel" id="painel-seguranca" role="region" hidden>
+          <p>Proteja o seu patrimônio digital com verificação em duas etapas, senha forte e confirmação biométrica a cada envio de cripto. Você também pode revisar os aparelhos conectados e encerrar qualquer acesso que não reconheça.</p>
+          <ul>
+            <li><span>Verificação em duas etapas</span><strong>Ativada</strong></li>
+            <li><span>Confirmação por biometria</span><strong>Ativada</strong></li>
+            <li><span>Aparelhos conectados</span><strong>1</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="opcao">
+        <button type="button" class="opcao-topo" aria-expanded="false" aria-controls="painel-notificacoes">
+          <!-- img/notificacoes 2.svg --><svg class="ic ic-notificacoes" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M23.0909 11.5C23.0909 5.975 19.0227 1.5 14 1.5C8.97727 1.5 4.90909 5.975 4.90909 11.5C4.90909 21.5 1.5 24 1.5 26.5H26.5C26.5 24 23.0909 21.5 23.0909 11.5Z" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke="#C026FF"/></svg>
+          <span class="opcao-txt">
+            <span class="opcao-nome">Notificações</span>
+            <span class="opcao-desc">Notifique seus alertas</span>
+          </span>
+          <!-- img/seta config.svg --><svg class="seta" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M20.8353 11.0662L13.9247 2.0587L15.4098 0L25 12.5L15.4098 25L13.9247 22.9414L20.8353 13.9339H0V11.0662H20.8353Z" fill-rule="evenodd" clip-rule="evenodd" fill="#CBB4F5"/></svg>
+        </button>
+        <div class="painel" id="painel-notificacoes" role="region" hidden>
+          <p>Escolha o que você quer acompanhar: alertas de preço do Bitcoin, Solana e AAVE, confirmação de cada envio e recebimento e um resumo diário da sua carteira. Você decide se os avisos chegam pelo aplicativo ou por e-mail.</p>
+          <ul>
+            <li><span>Alertas de preço</span><strong>Ativados</strong></li>
+            <li><span>Envios e recebimentos</span><strong>Ativados</strong></li>
+            <li><span>Resumo diário</span><strong>Desativado</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="opcao">
+        <button type="button" class="opcao-topo" aria-expanded="false" aria-controls="painel-aparencia">
+          <!-- img/aparencia.svg --><svg class="ic ic-aparencia" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M12.5 0C19.4036 0 25 5.59644 25 12.5C25 12.7493 24.9927 12.997 24.9783 13.2427C24.895 14.6656 23.6086 15.6311 22.1834 15.6311H17.2041C14.4199 15.6311 13.0257 18.9972 14.9943 20.9658C16.3786 22.35 15.9344 24.6811 13.9904 24.912C13.5017 24.9702 13.0043 25 12.5 25C5.59644 25 0 19.4036 0 12.5C0 5.59644 5.59644 0 12.5 0ZM12.5 3.125C7.32233 3.125 3.125 7.32233 3.125 12.5C3.125 17.4278 6.92703 21.4677 11.7577 21.8461C9.46719 17.8916 12.2238 12.5061 17.2041 12.5061H21.875C21.875 7.32233 17.6777 3.125 12.5 3.125ZM7.8125 12.5C8.67544 12.5 9.375 13.1995 9.375 14.0625C9.375 14.9254 8.67544 15.625 7.8125 15.625C6.94956 15.625 6.25 14.9254 6.25 14.0625C6.25 13.1995 6.94956 12.5 7.8125 12.5ZM9.375 7.8125C10.2379 7.8125 10.9375 8.51206 10.9375 9.375C10.9375 10.2379 10.2379 10.9375 9.375 10.9375C8.51206 10.9375 7.8125 10.2379 7.8125 9.375C7.8125 8.51206 8.51206 7.8125 9.375 7.8125ZM14.0625 6.25C14.9254 6.25 15.625 6.94956 15.625 7.8125C15.625 8.67544 14.9254 9.375 14.0625 9.375C13.1995 9.375 12.5 8.67544 12.5 7.8125C12.5 6.94956 13.1995 6.25 14.0625 6.25Z" fill="#C026FF"/></svg>
+          <span class="opcao-txt">
+            <span class="opcao-nome">Aparência</span>
+            <span class="opcao-desc">Personalize o visual</span>
+          </span>
+          <!-- img/seta config.svg --><svg class="seta" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M20.8353 11.0662L13.9247 2.0587L15.4098 0L25 12.5L15.4098 25L13.9247 22.9414L20.8353 13.9339H0V11.0662H20.8353Z" fill-rule="evenodd" clip-rule="evenodd" fill="#CBB4F5"/></svg>
+        </button>
+        <div class="painel" id="painel-aparencia" role="region" hidden>
+          <p>Deixe a KYLRO com a sua cara. O tema roxo escuro é o padrão, pensado para conforto visual em qualquer horário e para destacar os seus gráficos. Você também pode ocultar o saldo na tela inicial sempre que abrir o aplicativo.</p>
+          <ul>
+            <li><span>Tema</span><strong>Roxo escuro</strong></li>
+            <li><span>Ocultar saldo ao abrir</span><strong>Desativado</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="opcao">
+        <button type="button" class="opcao-topo" aria-expanded="false" aria-controls="painel-idioma">
+          <!-- img/idioma.svg --><svg class="ic ic-idioma" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 0C5.38443 0 0 5.38443 0 12C0 18.6156 5.38443 24 12 24C18.6156 24 24 18.6156 24 12C24 5.38443 18.6156 0 12 0ZM12 2C12.1807 2 12.4377 2.0956 12.7988 2.51562C13.16 2.93569 13.5547 3.64591 13.8887 4.56445C14.1159 5.18941 14.3041 5.93657 14.4707 6.73047C13.7039 6.87853 12.8764 6.97266 12 6.97266C11.123 6.97266 10.2961 6.8787 9.5293 6.73047C9.69593 5.93657 9.88407 5.18941 10.1113 4.56445C10.4453 3.64591 10.84 2.93569 11.2012 2.51562C11.5623 2.09557 11.8193 2 12 2ZM15.1777 2.52734C16.4403 2.95177 17.5931 3.61198 18.5742 4.46875C18.367 4.94057 17.8632 5.45399 16.9785 5.91406C16.8047 6.00444 16.5951 6.0806 16.3984 6.16211C16.22 5.34612 16.0172 4.56741 15.7676 3.88086C15.5896 3.39149 15.3928 2.94231 15.1777 2.52734ZM8.82031 2.5293C8.60568 2.94365 8.41005 3.39238 8.23242 3.88086C7.98299 4.56679 7.78191 5.345 7.60352 6.16016C7.40714 6.07873 7.19701 6.00433 7.02344 5.91406C6.13876 5.45399 5.63498 4.94057 5.42773 4.46875C6.40804 3.61294 7.55936 2.95386 8.82031 2.5293ZM4.01562 5.98828C4.52142 6.67347 5.25513 7.24732 6.10156 7.6875C6.45999 7.8739 6.84901 8.03711 7.25391 8.18555C7.13772 9.08094 7.0662 10.0226 7.03516 11H2.04883C2.23406 9.12526 2.94349 7.41148 4.01562 5.98828ZM19.9863 5.99023C21.0575 7.41301 21.766 9.12622 21.9512 11H16.9648C16.9338 10.0226 16.8623 9.08094 16.7461 8.18555C17.1512 8.0371 17.5419 7.87392 17.9004 7.6875C18.7463 7.24759 19.4806 6.67484 19.9863 5.99023ZM9.21094 8.70312C10.0911 8.8684 11.0201 8.97266 12 8.97266C12.9791 8.97266 13.9091 8.87009 14.7891 8.70508C14.877 9.43778 14.9349 10.2025 14.9629 11H9.03711C9.06509 10.2018 9.12289 9.4364 9.21094 8.70312ZM2.04883 13H7.03516C7.0654 13.9523 7.13493 14.8694 7.24609 15.7441C6.84428 15.8918 6.45739 16.0532 6.10156 16.2383C5.24007 16.6863 4.49497 17.2733 3.98828 17.9746C2.93177 16.5586 2.23246 14.8586 2.04883 13ZM9.03711 13H14.9629C14.9359 13.7714 14.8821 14.5115 14.7988 15.2227C13.9168 15.0565 12.9843 14.9532 12.002 14.9531H12C11.0177 14.9532 10.0855 15.0565 9.20312 15.2227C9.11982 14.5115 9.06415 13.7715 9.03711 13ZM16.9648 13H21.9512C21.7675 14.8586 21.0682 16.5586 20.0117 17.9746C19.505 17.2733 18.7599 16.6863 17.8984 16.2383C17.5426 16.0532 17.1556 15.8918 16.7539 15.7441C16.8651 14.8694 16.9346 13.9523 16.9648 13ZM12 16.9531C12.882 16.9531 13.714 17.0474 14.4844 17.1973C14.3149 18.0193 14.1227 18.792 13.8887 19.4355C13.5547 20.3541 13.16 21.0643 12.7988 21.4844C12.4377 21.9044 12.1807 22 12 22C11.8193 22 11.5623 21.9044 11.2012 21.4844C10.84 21.0643 10.4453 20.3541 10.1113 19.4355C9.87731 18.792 9.68509 18.0193 9.51562 17.1973C10.2861 17.0476 11.1185 16.9531 12 16.9531ZM7.58984 17.7695C7.77107 18.6109 7.97599 19.4139 8.23242 20.1191C8.41005 20.6076 8.60568 21.0563 8.82031 21.4707C7.54792 21.0423 6.3864 20.3749 5.40039 19.5078C5.59484 19.0223 6.10579 18.4879 7.02148 18.0117C7.19167 17.9232 7.39766 17.8496 7.58984 17.7695ZM16.4102 17.7715C16.6014 17.8512 16.8071 17.9236 16.9766 18.0117C17.8935 18.4886 18.4038 19.0237 18.5977 19.5098C17.6118 20.3762 16.4517 21.0427 15.1797 21.4707C15.3943 21.0563 15.59 20.6076 15.7676 20.1191C16.0238 19.4145 16.229 18.6122 16.4102 17.7715Z" fill="#C026FF"/></svg>
+          <span class="opcao-txt">
+            <span class="opcao-nome">Idioma</span>
+            <span class="opcao-desc">Escolha seu idioma</span>
+          </span>
+          <!-- img/seta config.svg --><svg class="seta" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M20.8353 11.0662L13.9247 2.0587L15.4098 0L25 12.5L15.4098 25L13.9247 22.9414L20.8353 13.9339H0V11.0662H20.8353Z" fill-rule="evenodd" clip-rule="evenodd" fill="#CBB4F5"/></svg>
+        </button>
+        <div class="painel" id="painel-idioma" role="region" hidden>
+          <p>A KYLRO está em Português (Brasil). Os valores aparecem em reais (R$) e as datas no formato dia/mês/ano. Novos idiomas, como inglês e espanhol, estão a caminho.</p>
+          <ul>
+            <li><span>Idioma</span><strong>Português (Brasil)</strong></li>
+            <li><span>Moeda</span><strong>Real (R$)</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="opcao">
+        <button type="button" class="opcao-topo" aria-expanded="false" aria-controls="painel-sobre">
+          <!-- img/informacoes.svg --><svg class="ic ic-sobre" viewBox="0 0 21 21" fill="none" aria-hidden="true"><path d="M10.1562 1.5625C5.41005 1.5625 1.5625 5.41005 1.5625 10.1562C1.5625 14.9024 5.41005 18.75 10.1562 18.75C14.9024 18.75 18.75 14.9024 18.75 10.1562C18.75 5.41005 14.9024 1.5625 10.1562 1.5625ZM0 10.1562C0 4.5471 4.5471 0 10.1562 0C15.7654 0 20.3125 4.5471 20.3125 10.1562C20.3125 15.7654 15.7654 20.3125 10.1562 20.3125C4.5471 20.3125 0 15.7654 0 10.1562ZM10.1562 9.375C10.5877 9.375 10.9375 9.72479 10.9375 10.1562V13.8021C10.9375 14.2335 10.5877 14.5833 10.1562 14.5833C9.72479 14.5833 9.375 14.2335 9.375 13.8021V10.1562C9.375 9.72479 9.72479 9.375 10.1562 9.375ZM10.1562 5.98958C9.58094 5.98958 9.11458 6.45596 9.11458 7.03125C9.11458 7.60654 9.58094 8.07292 10.1562 8.07292H10.1667C10.742 8.07292 11.2083 7.60654 11.2083 7.03125C11.2083 6.45596 10.742 5.98958 10.1667 5.98958H10.1562Z" fill-rule="evenodd" clip-rule="evenodd" fill="#C026FF"/></svg>
+          <span class="opcao-txt">
+            <span class="opcao-nome">Sobre o KYLRO</span>
+            <span class="opcao-desc">Informações do aplicativo</span>
+          </span>
+          <!-- img/seta config.svg --><svg class="seta" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M20.8353 11.0662L13.9247 2.0587L15.4098 0L25 12.5L15.4098 25L13.9247 22.9414L20.8353 13.9339H0V11.0662H20.8353Z" fill-rule="evenodd" clip-rule="evenodd" fill="#CBB4F5"/></svg>
+        </button>
+        <div class="painel" id="painel-sobre" role="region" hidden>
+          <p>KYLRO: sua cripto, seu controle. Uma carteira digital para acompanhar, enviar, receber e trocar criptoativos em um só lugar, com segurança e transparência em cada movimentação.</p>
+          <ul>
+            <li><span>Versão</span><strong>1.0.0</strong></li>
+            <li><span>Ativos disponíveis</span><strong>BTC, SOL, AAVE e USDT</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="opcao">
+        <button type="button" class="opcao-topo" aria-expanded="false" aria-controls="painel-ajuda">
+          <!-- img/ajuda.svg --><svg class="ic ic-ajuda" viewBox="0 0 21 21" fill="none" aria-hidden="true"><path d="M18.7521 10.1573C18.7522 9.02874 18.5299 7.91123 18.0981 6.86857C17.6663 5.8259 17.0334 4.87849 16.2354 4.08044C15.4374 3.28239 14.4901 2.64932 13.4475 2.21738C12.4049 1.78544 11.2874 1.56309 10.1589 1.56302C9.03031 1.56295 7.9128 1.78517 6.87013 2.21698C5.82746 2.64879 4.88005 3.28175 4.082 4.0797C2.47026 5.69125 1.56472 7.87705 1.56458 10.1562C1.56445 12.4355 2.46972 14.6214 4.08127 16.2331C5.69281 17.8448 7.87861 18.7504 10.1578 18.7505C12.437 18.7507 14.6229 17.8454 16.2347 16.2338C17.8464 14.6223 18.7519 12.4365 18.7521 10.1573ZM20.3146 10.1573C20.3146 12.8512 19.2444 15.4347 17.3396 17.3396C15.4347 19.2444 12.8512 20.3146 10.1573 20.3146C7.46341 20.3146 4.87986 19.2444 2.975 17.3396C1.07014 15.4347 0 12.8512 0 10.1573C0 7.46341 1.07014 4.87986 2.975 2.975C4.87986 1.07014 7.46341 0 10.1573 0C12.8512 0 15.4347 1.07014 17.3396 2.975C19.2444 4.87986 20.3146 7.46341 20.3146 10.1573Z" fill="#C026FF"/><path d="M10.6479 13.8032V15.3657H9.07502V13.8032H10.6479ZM9.93127 5.20948C10.655 5.21189 11.3551 5.46735 11.9102 5.9316C12.4654 6.39586 12.8407 7.03967 12.9712 7.75153C13.1016 8.46339 12.979 9.19846 12.6245 9.82941C12.27 10.4604 11.7061 10.9475 11.0302 11.2064L11.0094 11.2136C10.8958 11.2536 10.7983 11.3292 10.7313 11.4293C10.7396 11.4157 10.7313 11.4251 10.7156 11.4709C10.6796 11.5881 10.6545 11.7085 10.6406 11.8303V12.5949H9.07814V11.8136C9.07814 11.6876 9.10522 11.4824 9.14585 11.2928C9.18543 11.1116 9.26564 10.8105 9.43127 10.5626C9.68127 10.1866 10.0469 9.90115 10.4719 9.74594L10.6344 9.67302C10.8316 9.56948 11.0041 9.4244 11.1398 9.24777C11.2756 9.07114 11.3714 8.86718 11.4208 8.64993C11.4701 8.43268 11.4717 8.20733 11.4255 7.9894C11.3793 7.77147 11.2864 7.56615 11.1531 7.38761C11.0103 7.19732 10.8252 7.04277 10.6125 6.93609C10.3998 6.82942 10.1653 6.77353 9.92735 6.77283C9.68941 6.77212 9.45454 6.82661 9.24122 6.93202C9.02789 7.03743 8.84193 7.19088 8.69793 7.38031L8.22502 8.00323L6.98022 7.0574L7.4521 6.43656C7.74234 6.05428 8.11727 5.74452 8.54744 5.5316C8.97761 5.31869 9.45129 5.20842 9.93127 5.20948Z" fill="#C026FF"/></svg>
+          <span class="opcao-txt">
+            <span class="opcao-nome">Ajuda</span>
+            <span class="opcao-desc">Tire suas dúvidas</span>
+          </span>
+          <!-- img/seta config.svg --><svg class="seta" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M20.8353 11.0662L13.9247 2.0587L15.4098 0L25 12.5L15.4098 25L13.9247 22.9414L20.8353 13.9339H0V11.0662H20.8353Z" fill-rule="evenodd" clip-rule="evenodd" fill="#CBB4F5"/></svg>
+        </button>
+        <div class="painel" id="painel-ajuda" role="region" hidden>
+          <p>Ficou com alguma dúvida? Veja como enviar, receber e fazer swap de cripto em poucos passos, ou fale com o nosso suporte pelo chat. A equipe da KYLRO responde todos os dias, das 8h às 22h.</p>
+          <ul>
+            <li><span>Atendimento</span><strong>Todos os dias, 8h às 22h</strong></li>
+            <li><span>Tempo médio de resposta</span><strong>5 minutos</strong></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="opcao opcao-sair">
+        <button type="button" class="opcao-topo" id="btnSair" aria-haspopup="dialog">
+          <!-- img/logout 2 red.svg --><svg class="ic ic-sair" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M0 5.625C0 2.5184 2.39848 0 5.35715 0H11.9048C14.5347 0 16.6667 2.23857 16.6667 5V6.25C16.6667 6.94035 16.1337 7.5 15.4762 7.5C14.8187 7.5 14.2857 6.94035 14.2857 6.25V5C14.2857 3.61929 13.2198 2.5 11.9048 2.5H5.35715C3.71344 2.5 2.38096 3.89911 2.38096 5.625V19.375C2.38096 21.1009 3.71344 22.5 5.35715 22.5H11.9048C13.2198 22.5 14.2857 21.3808 14.2857 20V18.75C14.2857 18.0596 14.8187 17.5 15.4762 17.5C16.1337 17.5 16.6667 18.0596 16.6667 18.75V20C16.6667 22.7614 14.5347 25 11.9048 25H5.35715C2.39848 25 0 22.4816 0 19.375V5.625ZM19.3963 7.86611C19.8612 7.37796 20.615 7.37796 21.0799 7.86611L24.6513 11.6161C25.1162 12.1042 25.1162 12.8958 24.6513 13.3839L21.0799 17.1339C20.615 17.622 19.8612 17.622 19.3963 17.1339C18.9315 16.6458 18.9315 15.8542 19.3963 15.3661L20.9355 13.75H10.7143C10.0568 13.75 9.52382 13.1904 9.52382 12.5C9.52382 11.8096 10.0568 11.25 10.7143 11.25H20.9355L19.3963 9.63389C18.9315 9.14573 18.9315 8.35427 19.3963 7.86611Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FF5C70"/></svg>
+          <span class="opcao-txt">
+            <span class="opcao-nome">Sair</span>
+            <span class="opcao-desc">Encerrar sessão</span>
+          </span>
+          <!-- img/seta config.svg --><svg class="seta" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M20.8353 11.0662L13.9247 2.0587L15.4098 0L25 12.5L15.4098 25L13.9247 22.9414L20.8353 13.9339H0V11.0662H20.8353Z" fill-rule="evenodd" clip-rule="evenodd" fill="#CBB4F5"/></svg>
+        </button>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- confirmação de saída -->
+  <div class="modal" id="modalSair" role="dialog" aria-modal="true" aria-labelledby="modalTitulo" hidden>
+    <div class="modal-caixa">
+      <!-- img/logout 2 red.svg --><svg class="modal-ic" viewBox="0 0 25 25" fill="none" aria-hidden="true"><path d="M0 5.625C0 2.5184 2.39848 0 5.35715 0H11.9048C14.5347 0 16.6667 2.23857 16.6667 5V6.25C16.6667 6.94035 16.1337 7.5 15.4762 7.5C14.8187 7.5 14.2857 6.94035 14.2857 6.25V5C14.2857 3.61929 13.2198 2.5 11.9048 2.5H5.35715C3.71344 2.5 2.38096 3.89911 2.38096 5.625V19.375C2.38096 21.1009 3.71344 22.5 5.35715 22.5H11.9048C13.2198 22.5 14.2857 21.3808 14.2857 20V18.75C14.2857 18.0596 14.8187 17.5 15.4762 17.5C16.1337 17.5 16.6667 18.0596 16.6667 18.75V20C16.6667 22.7614 14.5347 25 11.9048 25H5.35715C2.39848 25 0 22.4816 0 19.375V5.625ZM19.3963 7.86611C19.8612 7.37796 20.615 7.37796 21.0799 7.86611L24.6513 11.6161C25.1162 12.1042 25.1162 12.8958 24.6513 13.3839L21.0799 17.1339C20.615 17.622 19.8612 17.622 19.3963 17.1339C18.9315 16.6458 18.9315 15.8542 19.3963 15.3661L20.9355 13.75H10.7143C10.0568 13.75 9.52382 13.1904 9.52382 12.5C9.52382 11.8096 10.0568 11.25 10.7143 11.25H20.9355L19.3963 9.63389C18.9315 9.14573 18.9315 8.35427 19.3963 7.86611Z" fill-rule="evenodd" clip-rule="evenodd" fill="#FF5C70"/></svg>
+      <h2 class="modal-titulo" id="modalTitulo">Você tem certeza?</h2>
+      <p class="modal-texto">Você será desconectado da sua conta KYLRO.</p>
+      <div class="modal-botoes">
+        <button type="button" class="modal-btn cancelar" id="cancelarSair">Cancelar</button>
+        <button type="button" class="modal-btn confirmar" id="confirmarSair">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/configuracoes.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYLRO | Enviar cripto</title>
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#4c0fd0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/enviar.css">
+</head>
+<body>
+  <main class="enviar">
+
+    <header class="topo">
+      <a href="index.html" class="back" aria-label="Voltar para o início">
+        <svg viewBox="0 0 24 24"><path d="M22 12H3"/><path d="M12 3l-9 9 9 9"/></svg>
+      </a>
+      <h1 class="titulo">Enviar cripto</h1>
+      <span class="marca">KYLRO</span>
+    </header>
+
+    <div class="icone-envio" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M6 18L18 6"/><path d="M8 6h10v10"/></svg>
+    </div>
+
+    <p class="instrucao">Selecione o ativo digital e preencha os dados abaixo</p>
+
+    <form class="form" id="formEnviar" novalidate>
+
+      <div class="ativo" id="ativo">
+        <button type="button" class="ativo-atual" id="ativoBtn" aria-haspopup="listbox" aria-expanded="false">
+          <span class="ativo-logo" id="ativoLogo"></span>
+          <span class="ativo-nome" id="ativoNome"></span>
+          <svg class="ativo-seta" viewBox="0 0 24 24"><path d="M12 4v16"/><path d="M6 14l6 6 6-6"/></svg>
+        </button>
+        <ul class="ativo-lista" id="ativoLista" role="listbox" hidden></ul>
+      </div>
+
+      <label class="rotulo" for="carteira">Carteira destinatária</label>
+      <input class="campo" id="carteira" type="text" autocomplete="off" spellcheck="false"
+             placeholder="Cole ou digite o endereço da carteira">
+
+      <label class="rotulo" for="quantidade">Quantidade</label>
+      <div class="campo campo-qtd">
+        <input id="quantidade" type="text" inputmode="decimal" autocomplete="off" placeholder="0,00">
+        <span class="unidade" id="unidade">BTC</span>
+      </div>
+
+      <p class="rotulo rotulo-centro">Custo da transação</p>
+      <div class="campo campo-taxa" id="taxa">Taxa estimada</div>
+
+      <button type="submit" class="btn-enviar" id="btnEnviar">ENVIAR</button>
+      <p class="aviso" id="aviso" role="status"></p>
+    </form>
+  </main>
+
+  <script src="js/enviar.js"></script>
+</body>
+</html>

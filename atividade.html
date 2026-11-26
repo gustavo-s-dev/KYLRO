@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYLRO | Atividade</title>
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#4c0fd0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/atividade.css">
+</head>
+<body>
+  <main class="atividade">
+
+    <header class="topo">
+      <a href="index.html" class="back" aria-label="Voltar para o início">
+        <svg viewBox="0 0 24 24"><path d="M22 12H3"/><path d="M12 3l-9 9 9 9"/></svg>
+      </a>
+      <div>
+        <h1 class="titulo">Atividade</h1>
+        <p class="sub">Acompanhe as suas movimentações</p>
+      </div>
+    </header>
+
+    <div class="filtros">
+      <button type="button" class="filtro ativo">Todas</button>
+    </div>
+
+    <!-- preenchido por js/atividade.js -->
+    <section class="lista" id="lista" aria-live="polite"></section>
+  </main>
+
+  <script src="js/atividade.js"></script>
+</body>
+</html>

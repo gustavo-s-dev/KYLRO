@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYLRO | Swap</title>
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="theme-color" content="#4c0fd0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/swap.css">
+</head>
+<body>
+  <main class="swap">
+
+    <a href="index.html" class="back" aria-label="Voltar para o início">
+      <svg viewBox="0 0 48 32"><path d="M46 16H4"/><path d="M16 3L3 16l13 13"/></svg>
+    </a>
+
+    <section class="swap-box">
+      <article class="card card-pay">
+        <h2 class="card-label">você paga</h2>
+        <div class="card-row">
+          <div class="token" id="payToken"></div>
+          <p class="amount" id="payAmount"></p>
+        </div>
+      </article>
+
+      <button class="invert" id="invertBtn" aria-label="Inverter moedas">
+        <svg viewBox="0 0 40 40">
+          <path d="M13 34V7"/><path d="M6 14l7-7 7 7"/>
+          <path d="M27 6v27"/><path d="M20 26l7 7 7-7"/>
+        </svg>
+      </button>
+
+      <article class="card card-receive">
+        <h2 class="card-label">você recebe</h2>
+        <div class="card-row">
+          <div class="token" id="receiveToken"></div>
+          <p class="amount" id="receiveAmount"></p>
+        </div>
+      </article>
+    </section>
+
+    <div class="limits">
+      <button type="button" data-limit="min">MÍN</button>
+      <button type="button" data-limit="max">MAX</button>
+    </div>
+
+    <div class="slider" id="slider">
+      <span class="slider-thumb" id="sliderThumb">
+        <svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg>
+      </span>
+      <span class="slider-text" id="sliderText">deslize para swap</span>
+      <span class="slider-arrows">
+        <svg viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M14 6l6 6-6 6"/></svg>
+        <svg viewBox="0 0 24 24" class="soft"><path d="M4 12h16"/><path d="M14 6l6 6-6 6"/></svg>
+      </span>
+    </div>
+
+    <p class="note">As transações estão sujeitas à cotação do mercado.</p>
+  </main>
+
+  <script src="js/swap.js"></script>
+</body>
+</html>

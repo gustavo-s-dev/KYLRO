@@ -1,0 +1,303 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #270068;
+  --campo: #34008e;
+  --circulo: #580094;
+  --icone: #c026ff;
+  --voltar: #a020f0;
+  --texto: #ffffff;
+  --suave: #be9cf8;
+  --seta: #c2b3dd;
+  --verde: #69d6a3;
+  --erro: #ff5a6a;
+}
+
+html, body { min-height: 100%; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--texto);
+}
+
+button, input { font-family: inherit; color: inherit; border: none; background: none; outline: none; }
+button { cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ===== PÁGINA ===== */
+.enviar {
+  margin: 0 auto;
+  padding: 20px 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== TOPO ===== */
+/* cabeçalho ocupa a largura toda: seta e título à esquerda, logo à direita */
+.topo {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(25px, 4vw, 48px) 0 clamp(23px, 4vw, 48px);
+  height: 30px;
+}
+
+.back {
+  color: var(--voltar);
+  display: flex;
+  transition: transform .2s;
+}
+.back svg { width: 30px; height: 30px; stroke-width: 2.4; }
+.back:hover { transform: translateX(-4px); }
+
+.titulo {
+  margin-left: 29px;
+  font-size: 21.5px;
+  font-weight: 700;
+}
+
+.marca {
+  margin-left: auto;
+  font-family: 'Poppins', sans-serif;
+  font-size: 37px;
+  font-weight: 600;
+  letter-spacing: 4.8px;
+  margin-right: -4.8px;
+  line-height: 1;
+}
+
+/* ===== ÍCONE ===== */
+.icone-envio {
+  width: 88px;
+  height: 88px;
+  margin-top: 46px;
+  border-radius: 50%;
+  background: var(--circulo);
+  color: var(--icone);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, .3);
+}
+.icone-envio svg { width: 46px; height: 46px; stroke-width: 1.8; }
+
+.instrucao {
+  position: relative;
+  left: 15px;
+  margin-top: 30px;
+  font-size: 14.5px;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 16px;
+}
+
+/* ===== FORMULÁRIO ===== */
+.form {
+  width: 316px;
+  max-width: calc(100% - 40px);
+  margin-top: 25px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* seletor de ativo */
+.ativo { position: relative; margin-left: -5px; width: calc(100% + 1px); }
+
+.ativo-atual {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px 0 17px;
+  background: var(--campo);
+  border-radius: 10px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .2);
+  text-align: left;
+}
+
+.ativo-logo,
+.ativo-lista .ativo-logo {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+.ativo-logo svg { width: 100%; height: 100%; stroke: none; }
+.logo-btc {
+  background: #f7931a;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ativo-nome {
+  margin-left: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #d9ccff;
+}
+
+.ativo-seta {
+  margin-left: auto;
+  width: 16px;
+  height: 16px;
+  color: var(--seta);
+  stroke-width: 2;
+  transition: transform .25s;
+}
+.ativo.aberto .ativo-seta { transform: rotate(180deg); }
+
+.ativo-lista {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  list-style: none;
+  background: var(--campo);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
+}
+.ativo-lista li {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 11px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #d9ccff;
+  cursor: pointer;
+}
+.ativo-lista li:hover,
+.ativo-lista li[aria-selected="true"] { background: rgba(255, 255, 255, .08); }
+
+/* rótulos e campos */
+.rotulo {
+  margin-top: 27px;
+  margin-bottom: 15px;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1;
+}
+.rotulo-centro { text-align: center; }
+.campo-qtd + .rotulo-centro { margin-top: 19px; margin-bottom: 7px; }
+#carteira + .rotulo { margin-top: 20px; margin-bottom: 17px; }
+
+.campo {
+  width: 100%;
+  height: 38px;
+  padding: 0 14px;
+  background: var(--campo);
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid transparent;
+  transition: border-color .2s;
+}
+.campo::placeholder,
+.campo input::placeholder { color: var(--suave); opacity: 1; }
+.campo:focus,
+.campo:focus-within { border-color: rgba(190, 156, 248, .5); }
+.campo.invalido { border-color: var(--erro); }
+
+
+.campo-qtd {
+  display: flex;
+  align-items: center;
+}
+.campo-qtd input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  font-size: 13px;
+  font-weight: 600;
+}
+.unidade {
+  margin-left: 10px;
+  margin-right: 15px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--suave);
+}
+
+.campo-taxa {
+  height: 44px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--suave);
+}
+
+/* botão */
+.btn-enviar {
+  margin-top: 28px;
+  height: 45px;
+  border-radius: 10px;
+  background: var(--verde);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: filter .2s, transform .1s;
+}
+.btn-enviar:hover { filter: brightness(1.05); }
+.btn-enviar:active { transform: scale(.98); }
+
+.aviso {
+  min-height: 18px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+.aviso.erro { color: var(--erro); }
+.aviso.ok { color: var(--verde); }
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 480px) {
+  .topo { padding: 0 18px; }
+  .titulo { margin-left: 20px; font-size: 18px; }
+  .marca { font-size: 28px; letter-spacing: 3.5px; margin-right: -3.5px; }
+  .icone-envio { margin-top: 40px; }
+  .instrucao { left: 0; }
+  .form { margin-left: 0; }
+}
+
+@media (max-width: 360px) {
+  .titulo { margin-left: 14px; font-size: 16px; }
+  .marca { font-size: 24px; letter-spacing: 3px; margin-right: -3px; }
+}
+
+/* ===== COMPUTADOR: do seletor do Bitcoin para baixo, 20% maior (proporcional) ===== */
+@media (min-width: 1024px) {
+  .form { zoom: 1.2; }
+}
+
+/* ===== CELULAR: do círculo para baixo, 10% maior (proporcional) ===== */
+@media (max-width: 480px) {
+  .icone-envio, .instrucao, .form { zoom: 1.1; }
+}
+
+/* telas bem estreitas: texto de exemplo do campo da carteira cabe inteiro */
+@media (max-width: 360px) {
+  #carteira { font-size: 11.3px; }
+}
+@media (max-width: 340px) {
+  #carteira { font-size: 10.4px; padding: 0 12px; }
+}
