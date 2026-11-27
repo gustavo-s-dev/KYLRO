@@ -4,9 +4,9 @@
    que entra no estado da carteira e na Atividade.
    =========================== */
 
-import { MOEDAS, IDS, logoHTML } from './core/moedas.js?v=20261127g';
-import * as Estado from './core/estado.js?v=20261127g';
-import { qtd } from './core/formato.js?v=20261127g';
+import { MOEDAS, IDS, logoHTML } from './core/moedas.js?v=20261127h';
+import * as Estado from './core/estado.js?v=20261127h';
+import { qtd } from './core/formato.js?v=20261127h';
 
 let ativoAtual = 'btc';
 
@@ -32,7 +32,7 @@ function renderAtivo() {
   ativoNome.textContent = nomeCompleto(ativoAtual);
   enderecoEl.textContent = m.endereco;
   enderecoEl.title = m.endereco;
-  btnSimular.textContent = `Simular recebimento de ${qtd(ativoAtual, m.deposito)}`;
+  atualizarSimular();
 
   ativoLista.innerHTML = IDS.map((id) => `
     <li role="option" data-moeda="${id}" aria-selected="${id === ativoAtual}">
@@ -115,15 +115,52 @@ btnShare.addEventListener('click', async () => {
   mostrarAviso(ok ? 'Compartilhamento indisponível: endereço copiado.' : 'Não foi possível compartilhar.');
 });
 
-/* ---------- Simular recebimento ---------- */
+/* ---------- Simular recebimento: no máximo 1 a cada 10 segundos ----------
+   O horário do último recebimento fica salvo no navegador: recarregar a página
+   ou abrir outra aba não zera a espera. */
+const ESPERA = 10000;
+const CHAVE_ESPERA = 'kylroUltimoRecebimento';
+let contagem = null;
+
+function ultimoRecebimento() {
+  try { return Number(localStorage.getItem(CHAVE_ESPERA)) || 0; } catch (e) { return 0; }
+}
+
+// milissegundos que faltam para liberar o próximo (nunca mais que a espera toda, mesmo se o relógio mudar)
+const faltam = () => Math.min(ESPERA, Math.max(0, ESPERA - (Date.now() - ultimoRecebimento())));
+
+function atualizarSimular() {
+  const ms = faltam();
+  if (ms > 0) {
+    btnSimular.disabled = true;
+    btnSimular.textContent = `Você poderá receber novamente em ${Math.ceil(ms / 1000)} s`;
+    if (!contagem) contagem = setInterval(atualizarSimular, 250);
+    return;
+  }
+  clearInterval(contagem);
+  contagem = null;
+  btnSimular.disabled = false;
+  btnSimular.textContent = `Simular recebimento de ${qtd(ativoAtual, MOEDAS[ativoAtual].deposito)}`;
+}
+
 btnSimular.addEventListener('click', () => {
+  if (faltam() > 0) return;
   const m = MOEDAS[ativoAtual];
   Estado.receber(ativoAtual, m.deposito);
+  try { localStorage.setItem(CHAVE_ESPERA, String(Date.now())); } catch (e) {}
+  atualizarSimular();
   mostrarAviso(
-    `${qtd(ativoAtual, m.deposito)} recebido. Saldo: ${qtd(ativoAtual, Estado.saldo(ativoAtual))}. <a href="atividade.html">Ver na Atividade</a>`,
-    5000
+    `${qtd(ativoAtual, m.deposito)} recebido. Saldo: ${qtd(ativoAtual, Estado.saldo(ativoAtual))}. <a href="atividade.html">Ver na Atividade</a><br>Você pode simular 1 recebimento a cada 10 segundos.`,
+    6000
   );
 });
+
+// recebimento simulado em outra aba: esta aba também espera
+window.addEventListener('storage', (e) => {
+  if (e.key === CHAVE_ESPERA) atualizarSimular();
+});
+// voltando pelo botão de voltar (página guardada na memória): confere a espera de novo
+window.addEventListener('pageshow', atualizarSimular);
 
 /* ---------- Início ---------- */
 renderAtivo();

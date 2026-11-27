@@ -327,6 +327,16 @@ svg {
   transition: color .2s, border-color .2s, background .2s;
 }
 .simular:hover { color: #fff; border-color: var(--suave); background: rgba(255, 255, 255, .04); }
+/* esperando para liberar o próximo: botão apagado, com a contagem regressiva */
+.simular:disabled,
+.simular:disabled:hover {
+  cursor: not-allowed;
+  opacity: .55;
+  color: var(--suave);
+  border-color: rgba(190, 156, 248, .55);
+  background: none;
+  font-variant-numeric: tabular-nums;
+}
 .aviso a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 
 @media (min-width: 1024px) { .simular { zoom: 1.2; } }

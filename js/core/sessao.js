@@ -4,9 +4,9 @@
    A próxima visita pergunta o nome de novo e começa com uma carteira nova.
    =========================== */
 
-import * as Nome from './nome.js?v=20261127g';
-import * as Estado from './estado.js?v=20261127g';
-import * as Alertas from './alertas.js?v=20261127g';
+import * as Nome from './nome.js?v=20261127h';
+import * as Estado from './estado.js?v=20261127h';
+import * as Alertas from './alertas.js?v=20261127h';
 
 export function sair() {
   Nome.apagar();
