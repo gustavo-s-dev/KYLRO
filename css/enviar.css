@@ -305,7 +305,7 @@ svg {
 /* logos das moedas: mesma caixa quadrada para todas, sem distorcer */
 .ativo-logo .logo-moeda { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: contain; }
 /* logos escuros (ETH, XRP) ganham um círculo claro atrás para aparecer no fundo roxo */
-.logo-claro { background: #f1ecff; border-radius: 50%; padding: 16%; }
+.logo-claro { background: #f1ecff; border-radius: 50%; padding: 4px; box-sizing: border-box; } /* padding em px (não em %): padding em % é calculado pela largura do elemento pai, não do logo */
 
 .disponivel { margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--suave); text-align: right; }
 .aviso a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }

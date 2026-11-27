@@ -4,9 +4,9 @@
    desconta do estado da carteira e registra o envio na Atividade.
    =========================== */
 
-import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127b';
-import * as Estado from './core/estado.js?v=20261127b';
-import { qtd as qtdTexto, lerNumero } from './core/formato.js?v=20261127b';
+import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127c';
+import * as Estado from './core/estado.js?v=20261127c';
+import { qtd as qtdTexto, lerNumero } from './core/formato.js?v=20261127c';
 
 let ativoAtual = Estado.moedasComSaldo()[0] || 'btc';
 

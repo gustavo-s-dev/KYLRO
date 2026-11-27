@@ -340,7 +340,8 @@ svg {
   .back { left: 22px; top: 28px; }
 }
 /* logos escuros (ETH, XRP) ganham um círculo claro atrás para aparecer no fundo roxo */
-.logo-claro { background: #f1ecff; border-radius: 50%; padding: 16%; box-sizing: border-box; }
+.logo-claro { background: #f1ecff; border-radius: 50%; padding: 6px; box-sizing: border-box; } /* padding em px (não em %): padding em % é calculado pela largura do elemento pai, não do logo */
+.opcao-logo.logo-claro { padding: 5px; }
 
 /* controle deslizante: foco pelo teclado e aviso quando a troca não pôde ser feita */
 .slider-thumb:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }

@@ -4,13 +4,13 @@
    vêm do estado da carteira (js/core/estado.js), o mesmo usado por Swap, Enviar e Receber.
    =========================== */
 
-import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127b';
-import * as Estado from './core/estado.js?v=20261127b';
-import * as Cotacoes from './core/cotacoes.js?v=20261127b';
-import * as Nome from './core/nome.js?v=20261127b';
-import { sair } from './core/sessao.js?v=20261127b';
-import { brl, pct, rotuloDia, hora } from './core/formato.js?v=20261127b';
-import { iniciarNotificacoes, aoAbrirPainel } from './notificacoes.js?v=20261127b';
+import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127c';
+import * as Estado from './core/estado.js?v=20261127c';
+import * as Cotacoes from './core/cotacoes.js?v=20261127c';
+import * as Nome from './core/nome.js?v=20261127c';
+import { sair } from './core/sessao.js?v=20261127c';
+import { brl, pct, rotuloDia, hora } from './core/formato.js?v=20261127c';
+import { iniciarNotificacoes, aoAbrirPainel } from './notificacoes.js?v=20261127c';
 
 /* ---------- Curvas ---------- */
 // leva qualquer série de preços para a faixa 0–1 (o gráfico usa a altura toda)

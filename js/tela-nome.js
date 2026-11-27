@@ -5,8 +5,8 @@
    (js/splash.js) e então o dashboard.
    =========================== */
 
-import * as Nome from "./core/nome.js?v=20261127b";
-import { abrirEntrada } from "./splash.js?v=20261127b";
+import * as Nome from "./core/nome.js?v=20261127c";
+import { abrirEntrada } from "./splash.js?v=20261127c";
 
 (() => {
   const html = document.documentElement;
