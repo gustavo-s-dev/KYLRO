@@ -2,8 +2,8 @@
    KYLRO - Configurações
    =========================== */
 
-import * as Nome from './core/nome.js?v=20261127d';
-import { sair } from './core/sessao.js?v=20261127d';
+import * as Nome from './core/nome.js?v=20261127e';
+import { sair } from './core/sessao.js?v=20261127e';
 
 /* ---------- Nome digitado na entrada do site ---------- */
 const nome = Nome.ler();

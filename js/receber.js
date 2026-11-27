@@ -4,9 +4,9 @@
    que entra no estado da carteira e na Atividade.
    =========================== */
 
-import { MOEDAS, IDS, logoHTML } from './core/moedas.js?v=20261127d';
-import * as Estado from './core/estado.js?v=20261127d';
-import { qtd } from './core/formato.js?v=20261127d';
+import { MOEDAS, IDS, logoHTML } from './core/moedas.js?v=20261127e';
+import * as Estado from './core/estado.js?v=20261127e';
+import { qtd } from './core/formato.js?v=20261127e';
 
 let ativoAtual = 'btc';
 

@@ -4,8 +4,8 @@
    os alertas são conferidos e, quando um é atingido, vira uma notificação.
    =========================== */
 
-import { MOEDAS } from './moedas.js?v=20261127d';
-import { brl } from './formato.js?v=20261127d';
+import { MOEDAS } from './moedas.js?v=20261127e';
+import { brl } from './formato.js?v=20261127e';
 
 const CHAVE = 'kylroAlertas';
 const MAX_NOTIFICACOES = 30;

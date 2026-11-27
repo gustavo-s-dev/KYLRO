@@ -40,6 +40,8 @@ Uma carteira de criptomoedas simulada, com cotações reais atualizadas ao vivo.
 
 **Alertas.** A cada cotação recebida, os alertas salvos são comparados com o preço atual. Um alerta que já estaria atingido no momento da criação é recusado, e cada alerta dispara uma única vez.
 
+**Navegação.** A troca entre páginas usa a View Transitions API: a página atual some, a próxima entra com uma animação curta e a barra de navegação do celular fica parada no lugar. As Speculation Rules fazem o navegador preparar a próxima página quando o link é tocado. A última cotação e o histórico do gráfico ficam guardados na sessão, então a página nova já abre com valores. Ao sair de uma página, a conexão WebSocket é fechada, o que permite ao navegador guardar a página na memória e voltar a ela instantaneamente. Navegadores sem suporte a esses recursos trocam de página normalmente.
+
 **Organização.** O código usa módulos JavaScript (`import`/`export`). O que é compartilhado fica em `js/core/`: catálogo de moedas, cotações, estado da carteira, alertas, formatação e regras do nome. Cada tela tem um arquivo próprio em `js/`.
 
 **Responsividade.** São três layouts: no computador, com menu lateral; no tablet; e no celular, com uma barra de navegação fixa na parte de baixo, como em um aplicativo.

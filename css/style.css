@@ -815,3 +815,18 @@ svg {
 @media (prefers-reduced-motion: reduce) {
   .notif.balanca svg, .toast, .toast.saindo { animation: none; }
 }
+
+/* ===== TRANSIÇÃO ENTRE PÁGINAS (View Transitions) =====
+   A página atual some rápido e a próxima entra subindo de leve. A barra de navegação
+   do celular tem nome próprio na transição: fica parada no lugar enquanto o resto troca.
+   Navegadores sem suporte simplesmente trocam de página como antes. */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: pagina-sai .16s ease-in both; }
+::view-transition-new(root) { animation: pagina-entra .28s cubic-bezier(.16, 1, .3, 1) both; }
+::view-transition-group(nav-app) { animation-duration: .2s; }
+@keyframes pagina-sai { to { opacity: 0; } }
+@keyframes pagina-entra { from { opacity: 0; transform: translateY(10px); } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root), ::view-transition-group(nav-app) { animation: none; }
+}
+@media (max-width: 700px) { .menu { view-transition-name: nav-app; } }

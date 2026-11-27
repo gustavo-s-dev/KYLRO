@@ -5,8 +5,8 @@
    (js/splash.js) e então o dashboard.
    =========================== */
 
-import * as Nome from "./core/nome.js?v=20261127d";
-import { abrirEntrada } from "./splash.js?v=20261127d";
+import * as Nome from "./core/nome.js?v=20261127e";
+import { abrirEntrada } from "./splash.js?v=20261127e";
 
 (() => {
   const html = document.documentElement;
@@ -45,7 +45,7 @@ import { abrirEntrada } from "./splash.js?v=20261127d";
 
   // entra animada depois de as fontes carregarem, para não trocar de letra no meio
   const fontes = document.fonts ? document.fonts.ready : Promise.resolve();
-  Promise.race([fontes, new Promise((r) => setTimeout(r, 1200))]).then(() => {
+  Promise.race([fontes, new Promise((r) => setTimeout(r, 800))]).then(() => {
     requestAnimationFrame(() => tela.classList.add('ativa'));
     setTimeout(() => input.focus({ preventScroll: true }), 700);
   });

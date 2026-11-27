@@ -2,8 +2,8 @@
    KYLRO - Entrada ao abrir o site (uma vez por visita)
    =========================== */
 
-const DURACAO = 3700; // tempo na tela antes de começar a sair (ms)
-const SAIDA = 800;    // duração da saída (ms)
+const DURACAO = 2300; // tempo na tela antes de começar a sair (ms): a animação termina em ~1,7 s
+const SAIDA = 600;    // duração da saída (ms)
 
 // a tela é montada uma única vez, invisível, quando a página carrega,
 // e só aparece na abertura do site (sem custo de montagem na hora de animar)
@@ -79,21 +79,16 @@ const esperandoNome = document.documentElement.classList.contains('kylro-nome');
 if (document.documentElement.classList.contains('kylro-abertura') && !esperandoNome) {
   try { sessionStorage.setItem('kylroAberturaVista', '1'); } catch (e) {}
 
-  // a animação só começa quando a página terminou de carregar e está ociosa
-  // (fontes prontas, Dashboard montado por trás da cobertura): assim ela roda lisa do início ao fim.
-  // A cobertura roxa já está na tela, então essa espera não aparece para o usuário.
+  // a animação começa assim que as fontes estão prontas (sem elas, as letras trocariam no meio).
+  // Não espera imagens nem cotações: o dashboard termina de montar por trás da cobertura roxa.
   const fontes = document.fonts ? document.fonts.ready : Promise.resolve();
-  const carregou = document.readyState === 'complete'
-    ? Promise.resolve()
-    : new Promise(r => window.addEventListener('load', r, { once: true }));
-  const ocioso = () => new Promise(r => (window.requestIdleCallback || setTimeout)(r, { timeout: 500 }));
-  const limite = new Promise(r => setTimeout(r, 2000)); // nunca espera mais que 2s
-  Promise.race([Promise.all([fontes, carregou]).then(ocioso), limite]).then(() => abrir(300)); // na abertura, a cobertura esconde o preparo extra
+  const limite = new Promise(r => setTimeout(r, 1000)); // nunca espera mais que 1 s
+  Promise.race([fontes, limite]).then(() => abrir(100));
 
   // segurança: se algo der errado, a cobertura nunca fica presa na tela
   setTimeout(() => {
     if (estado === 'fechada') document.documentElement.classList.remove('kylro-abertura');
-  }, 8000);
+  }, 6000);
 }
 
 // a tela do nome (js/tela-nome.js) abre a entrada depois que a pessoa digita o nome

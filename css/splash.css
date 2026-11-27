@@ -115,17 +115,17 @@ html.kylro-abertura::before {
 /* ---------- linha do tempo (começa quando a classe .ativa entra) ---------- */
 /* curva "ease-out" longa: começa decidida e pousa suavemente */
 .splash.ativa { animation: splash-entra .8s cubic-bezier(.16, 1, .3, 1) forwards; }
-.splash.ativa .splash-brilho { animation: splash-brilho 3.4s cubic-bezier(.33, 1, .68, 1) .15s forwards; }
+.splash.ativa .splash-brilho { animation: splash-brilho 2.4s cubic-bezier(.33, 1, .68, 1) .1s forwards; }
 .splash.ativa .splash-marca span {
-  animation: splash-letra 1.1s cubic-bezier(.16, 1, .3, 1) forwards;
-  animation-delay: calc(.3s + var(--i) * .08s);
+  animation: splash-letra .9s cubic-bezier(.16, 1, .3, 1) forwards;
+  animation-delay: calc(.15s + var(--i) * .06s);
 }
-.splash.ativa .splash-linha { animation: splash-linha 1.1s cubic-bezier(.65, 0, .35, 1) 1.05s forwards; }
-.splash.ativa .splash-frase { animation: splash-frase 1.2s cubic-bezier(.16, 1, .3, 1) 1.4s forwards; }
+.splash.ativa .splash-linha { animation: splash-linha .8s cubic-bezier(.65, 0, .35, 1) .55s forwards; }
+.splash.ativa .splash-frase { animation: splash-frase .9s cubic-bezier(.16, 1, .3, 1) .8s forwards; }
 
 /* saída: tudo sobe levemente e se dissolve */
-.splash.saindo { animation: splash-sai .8s cubic-bezier(.65, 0, .35, 1) forwards; }
-.splash.saindo .splash-conteudo { animation: splash-conteudo-sai .8s cubic-bezier(.65, 0, .35, 1) forwards; }
+.splash.saindo { animation: splash-sai .6s cubic-bezier(.65, 0, .35, 1) forwards; }
+.splash.saindo .splash-conteudo { animation: splash-conteudo-sai .6s cubic-bezier(.65, 0, .35, 1) forwards; }
 
 @keyframes splash-entra { from { opacity: 0; } to { opacity: 1; } }
 @keyframes splash-sai { from { opacity: 1; } to { opacity: 0; } }

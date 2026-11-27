@@ -7,7 +7,7 @@
    qualquer uma pode estar na carteira (depois de um swap) ou num alerta de preço.
    =========================== */
 
-import { IDS } from './moedas.js?v=20261127d';
+import { IDS } from './moedas.js?v=20261127e';
 
 const BINANCE = 'https://api.binance.com/api/v3';
 const GECKO = 'https://api.coingecko.com/api/v3';
@@ -39,6 +39,25 @@ const SIMULADO = {
 let fonte = null;            // 'binance' | 'gecko' | 'simulado'
 const brutos = {};           // símbolo da Binance -> { c: último preço, o: abertura 24 h }
 const dados = {};            // moeda -> { preco, abertura } em reais
+
+/* ---------- Última cotação da visita ----------
+   Fica guardada na sessão: ao trocar de página, a nova já abre com números na tela
+   (com menos de 1 minuto) e segue ao vivo assim que a conexão volta. */
+const CACHE = 'kylroCotacoes';
+try {
+  const c = JSON.parse(sessionStorage.getItem(CACHE));
+  if (c && Date.now() - c.quando < 60000) {
+    Object.assign(dados, c.dados);
+    fonte = c.fonte;
+  }
+} catch (e) {}
+
+let ultimoGuardado = 0;
+function guardar(agora = false) {
+  if (!agora && Date.now() - ultimoGuardado < 1000) return;
+  ultimoGuardado = Date.now();
+  try { sessionStorage.setItem(CACHE, JSON.stringify({ quando: Date.now(), fonte, dados })); } catch (e) {}
+}
 
 export const fonteAtual = () => fonte;
 export const precos = () => Object.fromEntries(Object.entries(dados).map(([m, d]) => [m, d.preco]));
@@ -101,6 +120,7 @@ function avisar() {
   requestAnimationFrame(() => {
     agendado = false;
     ouvintes.forEach((fn) => fn(dados, fonte));
+    guardar();
   });
 }
 
@@ -108,6 +128,7 @@ function avisar() {
 let socket = null;
 let tentativas = 0;
 let reserva = null;
+let saindo = false; // a página está sendo deixada: não reconecta
 
 function abrirSocket() {
   const canais = SIMBOLOS.map((s) => `${s.toLowerCase()}@miniTicker`).join('/');
@@ -126,7 +147,7 @@ function abrirSocket() {
   };
   socket.onclose = () => {
     socket = null;
-    if (document.hidden) return; // reabre quando a aba voltar a ficar visível
+    if (saindo || document.hidden) return; // reabre quando a página/aba voltar a ficar visível
     // enquanto reconecta, consulta o preço a cada 5 s para a tela não parar
     if (!reserva) reserva = setInterval(() => precosBinance().then(avisar).catch(() => {}), 5000);
     tentativas++;
@@ -136,6 +157,26 @@ function abrirSocket() {
 
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) return;
+  if (fonte === 'binance') {
+    precosBinance().then(avisar).catch(() => {});
+    if (!socket) abrirSocket();
+  } else if (fonte === 'gecko') {
+    precosGecko().then(avisar).catch(() => {});
+  }
+});
+
+// ao sair, fecha o WebSocket: assim o navegador pode guardar a página na memória e o
+// botão de voltar do celular mostra ela na hora (back/forward cache)
+window.addEventListener('pagehide', () => {
+  guardar(true);
+  saindo = true;
+  clearInterval(reserva);
+  reserva = null;
+  if (socket) socket.close();
+});
+window.addEventListener('pageshow', (e) => {
+  if (!e.persisted) return;
+  saindo = false;
   if (fonte === 'binance') {
     precosBinance().then(avisar).catch(() => {});
     if (!socket) abrirSocket();
@@ -172,7 +213,8 @@ async function iniciar() {
 export function assinar(fn) {
   ouvintes.add(fn);
   if (!iniciado) iniciado = iniciar().then(avisar);
-  else if (fonte) fn(dados, fonte);
+  // já tem a última cotação da visita: a tela aparece com números na hora
+  if (fonte && Object.keys(dados).length) queueMicrotask(() => fn(dados, fonte));
   return () => ouvintes.delete(fn);
 }
 
