@@ -5,9 +5,10 @@
    da carteira: os saldos mudam e a operação entra na Atividade.
    =========================== */
 
-import { MOEDAS, IDS, logoHTML } from './core/moedas.js?v=20261127f';
-import * as Estado from './core/estado.js?v=20261127f';
-import * as Cotacoes from './core/cotacoes.js?v=20261127f';
+import { MOEDAS, IDS, logoHTML } from './core/moedas.js?v=20261127g';
+import * as Estado from './core/estado.js?v=20261127g';
+import * as Cotacoes from './core/cotacoes.js?v=20261127g';
+import { lerNumero } from './core/formato.js?v=20261127g';
 
 const MINIMO_REAIS = 50; // valor mínimo de uma troca
 
@@ -27,7 +28,9 @@ if (tela.recebe === tela.paga) tela.recebe = 'btc';
 /* ---------- Elementos ---------- */
 const payToken      = document.getElementById('payToken');
 const receiveToken  = document.getElementById('receiveToken');
+const payCampo      = document.getElementById('payCampo');
 const payAmount     = document.getElementById('payAmount');
+const payUnidade    = document.getElementById('payUnidade');
 const receiveAmount = document.getElementById('receiveAmount');
 const saldoEl       = document.getElementById('saldo');
 const taxaEl        = document.getElementById('taxa');
@@ -49,6 +52,40 @@ function converter(valor, de, para) {
 // mantém o valor pago dentro do saldo
 const limitar = (valor, m) => Math.min(Math.max(valor, 0), Estado.saldo(m));
 
+const excedeSaldo = () => tela.valorPago > Estado.saldo(tela.paga) + 1e-12;
+
+/* ---------- Campo do valor pago ----------
+   A pessoa digita a quantidade que quiser. O campo só é reescrito quando o valor muda
+   por outro caminho (MÍN, MAX, troca de moeda, inverter), nunca no meio da digitação. */
+function ajustarLargura() {
+  payAmount.style.width = Math.max(1, payAmount.value.length) + 0.5 + 'ch';
+}
+
+function escreverValor() {
+  const m = tela.paga;
+  payAmount.value = tela.valorPago > 0
+    ? tela.valorPago.toLocaleString('pt-BR', { maximumFractionDigits: MOEDAS[m].casas, useGrouping: false })
+    : '';
+  ajustarLargura();
+}
+
+payAmount.addEventListener('input', () => {
+  // só números e uma vírgula, com no máximo as casas decimais da moeda
+  let v = payAmount.value.replace(/[^\d,.]/g, '').replace(/\./g, ',');
+  const i = v.indexOf(',');
+  if (i !== -1) v = v.slice(0, i + 1) + v.slice(i + 1).replace(/,/g, '').slice(0, MOEDAS[tela.paga].casas);
+  payAmount.value = v;
+  ajustarLargura();
+  tela.valorPago = lerNumero(v);
+  limitBtns.forEach((b) => b.classList.remove('active'));
+  render();
+});
+
+// Enter no campo não envia nada: só sai da digitação
+payAmount.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') payAmount.blur();
+});
+
 function renderToken(el, m) {
   el.innerHTML = `${logoHTML(m, 'logo')}<span class="token-nome">${MOEDAS[m].nome.toUpperCase()}</span>
     <svg class="token-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
@@ -65,13 +102,15 @@ function render() {
   payToken.setAttribute('aria-label', `Você paga com ${mp.nome}. Trocar moeda`);
   receiveToken.setAttribute('aria-label', `Você recebe ${mr.nome}. Trocar moeda`);
 
-  payAmount.innerHTML =
-    `<span class="sign neg">−</span>${formatar(valorPago, paga)} ${mp.simbolo}`;
+  payUnidade.textContent = mp.simbolo;
   receiveAmount.innerHTML = valorRecebido === null
     ? `<span class="carregando">cotando…</span>`
     : `<span class="sign pos">+</span>${formatar(valorRecebido, recebe)} ${mr.simbolo}`;
 
-  saldoEl.textContent = `Saldo: ${formatar(Estado.saldo(paga), paga)} ${mp.simbolo}`;
+  const excede = excedeSaldo();
+  payCampo.classList.toggle('invalido', excede);
+  saldoEl.classList.toggle('erro', excede);
+  saldoEl.textContent = `${excede ? 'Saldo insuficiente. Você tem' : 'Saldo:'} ${formatar(Estado.saldo(paga), paga)} ${mp.simbolo}`;
 
   const umPorOutro = converter(1, paga, recebe);
   taxaEl.textContent = umPorOutro === null
@@ -91,6 +130,7 @@ function trocarMoeda(lado, m) {
     tela.paga = m;
     tela.valorPago = Estado.saldo(m) / 2;
     if (tela.recebe === m) tela.recebe = m === 'usdt' ? 'btc' : 'usdt'; // não faz sentido trocar uma moeda por ela mesma
+    escreverValor();
   } else {
     tela.recebe = m;
   }
@@ -164,6 +204,7 @@ invertBtn.addEventListener('click', () => {
   const valorRecebido = converter(tela.valorPago, tela.paga, tela.recebe);
   [tela.paga, tela.recebe] = [tela.recebe, tela.paga];
   tela.valorPago = valorRecebido === null ? Estado.saldo(tela.paga) / 2 : limitar(valorRecebido, tela.paga);
+  escreverValor();
 
   rotacao += 180;
   invertBtn.style.setProperty('--rot', rotacao + 'deg');
@@ -171,7 +212,7 @@ invertBtn.addEventListener('click', () => {
   render();
 });
 
-/* ---------- MÍN / MAX ---------- */
+/* ---------- MÍN / MAX: atalhos que preenchem o campo ---------- */
 limitBtns.forEach((btn) => {
   btn.addEventListener('click', () => {
     const m = tela.paga;
@@ -181,6 +222,7 @@ limitBtns.forEach((btn) => {
       : limitar(preco ? MINIMO_REAIS / preco : Estado.saldo(m) * 0.01, m); // o equivalente a R$ 50
     limitBtns.forEach((b) => b.classList.remove('active'));
     btn.classList.add('active');
+    escreverValor();
     render();
   });
 });
@@ -190,12 +232,14 @@ Cotacoes.assinar(render);
 
 // a carteira mudou (aqui ou em outra aba): ajusta a moeda e o valor pago ao saldo novo
 Estado.aoMudar(() => {
+  const antes = tela.paga + tela.valorPago;
   if (!pagaveis().includes(tela.paga)) {
     tela.paga = pagaveis()[0] || tela.paga;
     tela.valorPago = Estado.saldo(tela.paga) / 2;
     if (tela.recebe === tela.paga) tela.recebe = tela.paga === 'usdt' ? 'btc' : 'usdt';
   }
   tela.valorPago = limitar(tela.valorPago, tela.paga);
+  if (tela.paga + tela.valorPago !== antes) escreverValor();
   render();
 });
 
@@ -234,7 +278,8 @@ function resetar() {
 function fazerSwap() {
   const recebido = converter(tela.valorPago, tela.paga, tela.recebe);
   if (recebido === null) throw new Error('aguarde a cotação');
-  if (!(tela.valorPago > 0)) throw new Error('saldo insuficiente');
+  if (!(tela.valorPago > 0)) throw new Error('digite a quantidade');
+  if (excedeSaldo()) throw new Error('saldo insuficiente');
   Estado.trocar(tela.paga, tela.recebe, tela.valorPago, recebido);
   return 'swap concluído';
 }
@@ -262,6 +307,7 @@ function soltar() {
     try {
       sliderText.textContent = fazerSwap();
       tela.valorPago = limitar(tela.valorPago, tela.paga);
+      escreverValor();
     } catch (err) {
       slider.classList.add('erro');
       sliderText.textContent = err.message.toLowerCase().replace(/\.$/, '');
@@ -288,4 +334,5 @@ thumb.addEventListener('keydown', (e) => {
 });
 
 /* ---------- Início ---------- */
+escreverValor();
 render();

@@ -4,10 +4,10 @@
    As regras ficam em js/core/alertas.js; aqui fica só a parte da tela.
    =========================== */
 
-import { MOEDAS, IDS } from './core/moedas.js?v=20261127f';
-import * as Alertas from './core/alertas.js?v=20261127f';
-import * as Cotacoes from './core/cotacoes.js?v=20261127f';
-import { brl, lerNumero, rotuloDia, hora } from './core/formato.js?v=20261127f';
+import { MOEDAS, IDS } from './core/moedas.js?v=20261127g';
+import * as Alertas from './core/alertas.js?v=20261127g';
+import * as Cotacoes from './core/cotacoes.js?v=20261127g';
+import { brl, lerNumero, rotuloDia, hora } from './core/formato.js?v=20261127g';
 
 const badge = document.getElementById('notifBadge');
 const notifBtn = document.getElementById('notifBtn');

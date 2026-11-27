@@ -4,9 +4,9 @@
    entra aqui com data e hora, agrupado por dia.
    =========================== */
 
-import { MOEDAS } from './core/moedas.js?v=20261127f';
-import * as Estado from './core/estado.js?v=20261127f';
-import { qtd, rotuloDia, hora } from './core/formato.js?v=20261127f';
+import { MOEDAS } from './core/moedas.js?v=20261127g';
+import * as Estado from './core/estado.js?v=20261127g';
+import { qtd, rotuloDia, hora } from './core/formato.js?v=20261127g';
 
 /* ---------- Ícones (img/recebido.svg, img/enviado.svg, img/swap 3.svg) ---------- */
 const icones = {

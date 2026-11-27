@@ -4,7 +4,7 @@
    Swap, Enviar e Receber alteram este estado; Início, Carteira e Atividade leem dele.
    =========================== */
 
-import { MOEDAS, IDS } from './moedas.js?v=20261127f';
+import { MOEDAS, IDS } from './moedas.js?v=20261127g';
 
 const CHAVE = 'kylroCarteira';
 const SALDOS_INICIAIS = { btc: 0.01, sol: 5, aave: 5.73 };

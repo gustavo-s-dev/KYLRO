@@ -14,8 +14,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- liga a transição entre páginas já no HTML (não depende do CSS ter baixado) -->
   <style>@view-transition { navigation: auto; }</style>
-  <link rel="stylesheet" href="css/swap.css?v=20261127f">
-  <link rel="stylesheet" href="css/navegacao.css?v=20261127f">
+  <link rel="stylesheet" href="css/swap.css?v=20261127g">
+  <link rel="stylesheet" href="css/navegacao.css?v=20261127g">
   <!-- navegação mais rápida: quando o dedo toca num link (ou o mouse para em cima), o navegador
        já prepara a próxima página; o início só é baixado, sem rodar antes da hora -->
   <script type="speculationrules">
@@ -37,7 +37,12 @@
         <h2 class="card-label">você paga</h2>
         <div class="card-row">
           <button type="button" class="token" id="payToken" aria-haspopup="dialog"></button>
-          <p class="amount" id="payAmount"></p>
+          <!-- a pessoa digita quanto quer pagar; MÍN e MAX só preenchem este campo -->
+          <label class="amount amount-campo" id="payCampo">
+            <span class="sign neg" aria-hidden="true">−</span>
+            <input id="payAmount" type="text" inputmode="decimal" autocomplete="off" placeholder="0" aria-label="Quantidade que você paga" aria-describedby="saldo">
+            <span class="amount-unid" id="payUnidade"></span>
+          </label>
         </div>
         <p class="saldo" id="saldo"></p>
       </article>
@@ -93,7 +98,7 @@
     </div>
   </div>
 
-  <script type="module" src="js/core/navegacao.js?v=20261127f"></script>
-  <script type="module" src="js/swap.js?v=20261127f"></script>
+  <script type="module" src="js/core/navegacao.js?v=20261127g"></script>
+  <script type="module" src="js/swap.js?v=20261127g"></script>
 </body>
 </html>

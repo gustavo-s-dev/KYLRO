@@ -129,6 +129,40 @@ svg {
 }
 .amount .carregando { font-size: 13px; font-weight: 600; color: var(--label); }
 
+/* campo do valor pago: a pessoa digita quanto quer trocar.
+   Borda no mesmo roxo dos gráficos do site (#8b5cf6). */
+.amount-campo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(139, 92, 246, .55);
+  border-radius: 8px;
+  cursor: text;
+  transition: border-color .2s, background .2s;
+}
+.amount-campo:hover { border-color: rgba(139, 92, 246, .85); }
+.amount-campo:focus-within { border-color: #a78bfa; background: rgba(139, 92, 246, .08); }
+.amount-campo input {
+  min-width: 1.5ch;
+  max-width: 13ch;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 16px; /* 16px: o iPhone não dá zoom no campo */
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  outline: none;
+}
+.amount-campo input::placeholder { color: var(--label); }
+.amount-unid { margin-left: 6px; }
+.amount-campo.invalido { border-color: var(--red); }
+.amount-campo.invalido input { color: var(--red); }
+.saldo.erro { color: var(--red); }
+
 .saldo {
   margin: 12px 0 0 11px;
   font-size: 12px;
