@@ -263,14 +263,14 @@ svg {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #6b43c2;
+  background: #4a2a96;
   border-radius: 6px;
 }
 .limits button {
   font-size: 17px;
   font-weight: 700;
   letter-spacing: .5px;
-  color: #a98fe8;
+  color: #c4b3f5;
   transition: color .2s;
 }
 .limits button:hover,
@@ -339,3 +339,10 @@ svg {
   .swap { padding-top: 90px; }
   .back { left: 22px; top: 28px; }
 }
+/* logos escuros (ETH, XRP) ganham um círculo claro atrás para aparecer no fundo roxo */
+.logo-claro { background: #f1ecff; border-radius: 50%; padding: 16%; box-sizing: border-box; }
+
+/* controle deslizante: foco pelo teclado e aviso quando a troca não pôde ser feita */
+.slider-thumb:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.slider.erro { background: #ffc2ca; }
+.slider.erro .slider-text { color: #8a1020; }

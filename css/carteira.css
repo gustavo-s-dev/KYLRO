@@ -196,3 +196,52 @@ svg {
   .item-qtd { font-size: 12.5px; }
   .item-valor { font-size: 15px; }
 }
+
+/* ===== LOGOS, TOTAL E REINICIAR ===== */
+/* logos das moedas: mesma caixa quadrada para todas, sem distorcer */
+.logo-moeda { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: contain; }
+/* logos escuros (ETH, XRP) ganham um círculo claro atrás para aparecer no fundo roxo */
+.logo-claro { background: #f1ecff; border-radius: 50%; padding: 16%; }
+
+.vazio { margin-top: 28px; font-size: 14px; color: var(--suave); line-height: 1.6; }
+.vazio a, .reiniciar-aviso a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+
+.total {
+  margin-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--suave);
+}
+.total strong { font-size: 19px; color: var(--texto); font-variant-numeric: tabular-nums; }
+
+.reiniciar { margin-top: 36px; text-align: center; }
+.reiniciar-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(184, 160, 232, .35);
+  border-radius: 10px;
+  background: none;
+  color: var(--suave);
+  font: 600 13.5px/1 'Sora', sans-serif;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+.reiniciar-btn:hover { color: #fff; border-color: rgba(184, 160, 232, .7); }
+.reiniciar-btn[hidden], .reiniciar-confirmar[hidden] { display: none; }
+.reiniciar-confirmar p { font-size: 14px; font-weight: 600; }
+.reiniciar-confirmar div { margin-top: 12px; display: flex; justify-content: center; gap: 10px; }
+.reiniciar-confirmar button {
+  min-height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 10px;
+  font: 600 13.5px/1 'Sora', sans-serif;
+  color: #fff;
+  cursor: pointer;
+}
+.reiniciar-confirmar .cancelar { background: rgba(255, 255, 255, .1); }
+.reiniciar-confirmar .confirmar { background: #8a2be2; }
+.reiniciar-aviso { min-height: 20px; margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--verde); }

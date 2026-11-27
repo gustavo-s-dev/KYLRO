@@ -7,11 +7,12 @@
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="description" content="Simule o envio de criptomoedas da sua carteira KYLRO, com conferência de saldo e taxa de rede.">
   <meta name="theme-color" content="#4c0fd0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/enviar.css?v=20261127">
+  <link rel="stylesheet" href="css/enviar.css?v=20261127b">
 </head>
 <body>
   <main class="enviar">
@@ -50,6 +51,7 @@
         <input id="quantidade" type="text" inputmode="decimal" autocomplete="off" placeholder="0,00">
         <span class="unidade" id="unidade">BTC</span>
       </div>
+      <p class="disponivel" id="disponivel" aria-live="polite"></p>
 
       <p class="rotulo rotulo-centro">Custo da transação</p>
       <div class="campo campo-taxa" id="taxa">Taxa estimada</div>
@@ -59,6 +61,6 @@
     </form>
   </main>
 
-  <script src="js/enviar.js?v=20261127"></script>
+  <script type="module" src="js/enviar.js?v=20261127b"></script>
 </body>
 </html>

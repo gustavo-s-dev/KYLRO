@@ -2,11 +2,12 @@
    KYLRO - Configurações
    =========================== */
 
-/* ---------- Nome digitado na entrada do site (js/nome.js guarda em "kylroNome") ---------- */
-try {
-  const nome = localStorage.getItem('kylroNome');
-  if (nome) document.getElementById('perfilNome').textContent = nome;
-} catch (e) {}
+import * as Nome from './core/nome.js?v=20261127b';
+import { sair } from './core/sessao.js?v=20261127b';
+
+/* ---------- Nome digitado na entrada do site ---------- */
+const nome = Nome.ler();
+if (nome) document.getElementById('perfilNome').textContent = nome;
 
 /* ---------- Abrir / fechar cada opção (uma por vez, como um FAQ) ---------- */
 const topos = document.querySelectorAll('.opcao-topo[aria-controls]');
@@ -60,11 +61,8 @@ document.addEventListener('keydown', e => {
 });
 
 confirmarSair.addEventListener('click', () => {
-  // simulação: encerra a sessão (esquece o nome) e volta para o início, que pergunta o nome de novo
-  try {
-    localStorage.removeItem('kylroNome');
-    sessionStorage.removeItem('kylroAberturaVista');
-  } catch (e) {}
+  // simulação: encerra a sessão (nome, carteira e alertas) e volta para o início, que pergunta o nome de novo
+  sair();
   confirmarSair.disabled = true;
   cancelarSair.disabled = true;
   confirmarSair.textContent = 'Saindo...';

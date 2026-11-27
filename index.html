@@ -8,6 +8,7 @@
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="description" content="Carteira de criptomoedas simulada com saldo e gráfico atualizados ao vivo pelas cotações da Binance e da CoinGecko.">
   <meta name="theme-color" content="#4c0fd0">
 
   <!-- entrada ao abrir o site: cobre a tela desde o primeiro instante (uma vez por visita).
@@ -16,10 +17,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261127">
-  <link rel="stylesheet" href="css/splash.css?v=20261127">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=20261127b">
+  <link rel="stylesheet" href="css/splash.css?v=20261127b">
 </head>
 
 <body>
@@ -109,11 +109,11 @@
             </svg>
           </button>
 
-          <div class="ranges" id="ranges">
-            <button class="range active" data-range="1D">1D</button>
-            <button class="range" data-range="1S">1S</button>
-            <button class="range" data-range="1M">1M</button>
-            <button class="range" data-range="1A">1A</button>
+          <div class="ranges" id="ranges" role="group" aria-label="Período do gráfico">
+            <button class="range active" data-range="1D" aria-pressed="true">1D</button>
+            <button class="range" data-range="1S" aria-pressed="false">1S</button>
+            <button class="range" data-range="1M" aria-pressed="false">1M</button>
+            <button class="range" data-range="1A" aria-pressed="false">1A</button>
           </div>
         </div>
 
@@ -149,8 +149,8 @@
       </section>
 
       <!-- Gráfico grande do saldo -->
-      <div class="chart" id="mainChart">
-        <svg id="mainChartSvg" viewBox="0 0 800 300" preserveAspectRatio="none">
+      <div class="chart" id="mainChart" tabindex="0" role="img" aria-label="Gráfico do saldo da carteira">
+        <svg id="mainChartSvg" viewBox="0 0 800 300" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="mainStroke" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stop-color="#7c3aed" />
@@ -167,6 +167,12 @@
           <path id="mainLine" fill="none" stroke="url(#mainStroke)" stroke-width="4" stroke-linecap="round" vector-effect="non-scaling-stroke" />
         </svg>
         <span class="chart-dot" id="mainDot"></span>
+        <!-- ao passar o mouse ou o dedo: linha, ponto e valor daquele momento -->
+        <div class="chart-mira" id="chartMira" hidden><span class="chart-mira-ponto"></span></div>
+        <div class="chart-dica" id="chartDica" hidden aria-hidden="true">
+          <strong></strong>
+          <span><span class="chart-dica-tempo"></span> · <span class="chart-dica-var"></span></span>
+        </div>
       </div>
     </main>
 
@@ -180,10 +186,16 @@
               <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.7 21a2 2 0 0 1-3.4 0" />
             </svg>
+            <!-- ponto vermelho: só aparece quando há notificação ainda não vista -->
+            <i class="badge" id="notifBadge" hidden></i>
           </button>
-          <div class="pop-painel" id="popNotif" role="dialog" aria-label="Notificações" hidden>
-            <p class="pop-titulo">Notificações</p>
-            <div class="pop-vazio">
+          <div class="pop-painel pop-notif" id="popNotif" role="dialog" aria-label="Notificações" hidden>
+            <div class="pop-cabeca">
+              <p class="pop-titulo">Notificações</p>
+              <button type="button" class="pop-link" id="limparNotif" hidden>Limpar</button>
+            </div>
+            <ul class="notif-lista" id="notifLista"></ul>
+            <div class="pop-vazio" id="notifVazio">
               <span class="pop-vazio-ic">
                 <svg viewBox="0 0 24 24">
                   <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -191,8 +203,32 @@
                 </svg>
               </span>
               <strong>Não há notificações</strong>
-              <p>Quando houver novidades na sua carteira, como envios, recebimentos e alertas de preço, elas aparecerão aqui.</p>
+              <p>Crie um alerta de preço abaixo e avisamos aqui quando ele for atingido.</p>
             </div>
+
+            <!-- alertas de preço (js/notificacoes.js) -->
+            <section class="alertas" aria-labelledby="alertasTitulo">
+              <p class="pop-subtitulo" id="alertasTitulo">Alertas de preço</p>
+              <ul class="alerta-lista" id="alertaLista"></ul>
+              <form class="alerta-form" id="alertaForm" novalidate>
+                <p class="alerta-frase">Me avise quando</p>
+                <div class="alerta-linha">
+                  <select id="alertaMoeda" aria-label="Moeda"></select>
+                  <select id="alertaTipo" aria-label="Condição">
+                    <option value="acima">passar de</option>
+                    <option value="abaixo">cair abaixo de</option>
+                  </select>
+                </div>
+                <div class="alerta-linha">
+                  <label class="alerta-valor">
+                    <span aria-hidden="true">R$</span>
+                    <input id="alertaValor" type="text" inputmode="decimal" autocomplete="off" aria-label="Preço em reais">
+                  </label>
+                  <button type="submit" class="alerta-criar">Criar alerta</button>
+                </div>
+                <p class="alerta-dica" id="alertaDica" aria-live="polite"></p>
+              </form>
+            </section>
           </div>
         </div>
 
@@ -238,74 +274,8 @@
         </div>
       </header>
 
-      <section class="coins">
-
-        <!-- BTC -->
-        <article class="coin">
-          <div class="coin-logo btc">₿</div>
-          <div class="coin-body">
-            <h4 class="coin-name btc-c">BTC</h4>
-            <div class="spark" data-seed="3" data-from="#d9640b" data-to="#ffb23d" data-id="btc"></div>
-          </div>
-          <div class="coin-info">
-            <span class="up" id="pct-btc">+ 0,00%</span>
-            <small id="preco-btc">R$ —</small>
-          </div>
-        </article>
-
-        <!-- SOL -->
-        <article class="coin">
-          <div class="coin-logo sol">
-            <svg viewBox="0 0 40 32">
-              <defs>
-                <linearGradient id="solg" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#9945ff" />
-                  <stop offset="1" stop-color="#14f195" />
-                </linearGradient>
-              </defs>
-              <path d="M8 2h28l-4 6H4z" fill="url(#solg)" />
-              <path d="M4 13h28l4 6H8z" fill="url(#solg)" />
-              <path d="M8 24h28l-4 6H4z" fill="url(#solg)" />
-            </svg>
-          </div>
-          <div class="coin-body">
-            <h4 class="coin-name sol-c">SOL</h4>
-            <div class="spark" data-seed="7" data-from="#9d5cff" data-to="#19e6a1" data-id="sol"></div>
-          </div>
-          <div class="coin-info">
-            <span class="up" id="pct-sol">+ 0,00%</span>
-            <small id="preco-sol">R$ —</small>
-          </div>
-        </article>
-
-        <!-- AAVE -->
-        <article class="coin">
-          <div class="coin-logo aave">
-            <!-- img/aave.svg -->
-            <svg viewBox="0 0 30 30" fill="none">
-              <g clip-path="url(#clip0_3_10)">
-                <path d="M30 15.0079C30 6.70866 23.2913 0 15.0079 0C6.72441 0 0 6.70866 0 15.0079C0 23.3071 6.70866 30.0157 15.0079 30.0157C23.3071 30.0157 30 23.2913 30 15.0079Z" fill="#9391F7" />
-                <path d="M12.2047 15.7323C13.496 15.5276 14.3622 14.315 14.1574 13.0236C13.9527 11.7323 12.7401 10.8661 11.4488 11.0709C10.1574 11.2756 9.29128 12.4882 9.49601 13.7795C9.71648 15.0709 10.9291 15.937 12.2047 15.7323ZM18.3779 15.7323C19.6692 15.5276 20.5354 14.315 20.3307 13.0236C20.1259 11.7323 18.9133 10.8661 17.622 11.0709C16.3307 11.2756 15.4645 12.4882 15.6692 13.7795C15.874 15.0709 17.0866 15.937 18.3779 15.7323Z" fill="white" />
-                <path d="M14.9134 3.66928C8.50398 3.66928 3.30713 8.96062 3.30713 15.4803H6.26776C6.26776 10.5827 10.1103 6.62991 14.8977 6.62991C19.7008 6.62991 23.5276 10.5984 23.5276 15.4803H26.4882C26.5197 8.96062 21.3229 3.66928 14.9134 3.66928Z" fill="white" />
-              </g>
-              <defs>
-                <clipPath id="clip0_3_10">
-                  <rect width="30" height="30" fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
-          </div>
-          <div class="coin-body">
-            <h4 class="coin-name aave-c">AAVE</h4>
-            <div class="spark" data-seed="11" data-from="#c0509c" data-to="#33c7c7" data-id="aave"></div>
-          </div>
-          <div class="coin-info">
-            <span class="up" id="pct-aave">+ 0,00%</span>
-            <small id="preco-aave">R$ —</small>
-          </div>
-        </article>
-
-      </section>
+      <!-- moedas da carteira: preenchido por js/inicio.js a partir do estado da carteira -->
+      <section class="coins" id="coins" aria-label="Moedas da sua carteira"></section>
     </aside>
   </div>
 
@@ -322,9 +292,12 @@
     </div>
   </div>
 
-  <script src="js/nome.js?v=20261127"></script>
-  <script src="js/script.js?v=20261127"></script>
-  <script src="js/splash.js?v=20261127"></script>
+  <!-- aviso quando um alerta de preço é atingido -->
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="js/inicio.js?v=20261127b"></script>
+  <script type="module" src="js/splash.js?v=20261127b"></script>
+  <script type="module" src="js/tela-nome.js?v=20261127b"></script>
 </body>
 
 </html>

@@ -21,9 +21,11 @@ Uma carteira de criptomoedas simulada, com cotações reais atualizadas ao vivo.
 ## Funcionalidades
 
 - Na primeira visita, o site pergunta o nome da pessoa e passa a usá-lo no painel. Qualquer nome é aceito, com acento, hífen ou apóstrofo; só palavrões são recusados, inclusive com letras repetidas ou separadas por espaço.
-- O saldo e o gráfico da carteira acompanham o mercado segundo a segundo, com os períodos de 1 dia, 1 semana, 1 mês e 1 ano.
+- O saldo e o gráfico da carteira acompanham o mercado segundo a segundo, com os períodos de 1 dia, 1 semana, 1 mês e 1 ano. Ao passar o mouse ou o dedo sobre o gráfico, aparecem o valor e o horário daquele ponto.
+- As telas compartilham a mesma carteira. Um swap, um envio ou um recebimento simulado altera os saldos, aparece no Início e na Carteira e fica registrado na Atividade com data e hora. Na Carteira, um botão reinicia a demonstração.
 - Na Carteira, cada moeda mostra o valor em reais e a variação das últimas 24 horas, em verde quando subiu e em vermelho quando caiu.
-- No Swap, o pagamento é feito com as moedas da carteira (BTC, SOL ou AAVE) e é possível receber USDT, ETH, XRP, POL, TRX, UNI ou outra moeda da carteira, pela cotação do momento.
+- No Swap, o pagamento é feito com as moedas que estão na carteira e é possível receber BTC, SOL, AAVE, USDT, ETH, XRP, POL, TRX ou UNI, pela cotação do momento.
+- No sino de notificações dá para criar alertas de preço, como "me avise quando o BTC passar de R$ 350.000". Quando o preço é atingido, o alerta aparece no painel e, se a pessoa permitir, como notificação do sistema.
 - Também há telas de envio, recebimento (com QR code), atividade e configurações.
 
 ## Como funciona
@@ -32,7 +34,13 @@ Uma carteira de criptomoedas simulada, com cotações reais atualizadas ao vivo.
 
 **Preços em reais.** BTC, SOL e USDT têm par em reais na Binance. Para as outras moedas, como a AAVE, uso o par em dólar (por exemplo, AAVE/USDT) e multiplico pela cotação do USDT em reais.
 
-**Gráficos.** As curvas são desenhadas em SVG, sem biblioteca, com suavização Catmull-Rom convertida para curvas de Bézier. O gráfico principal soma, em cada ponto do período, o valor de todas as moedas da carteira.
+**Estado da carteira.** Saldos e histórico ficam num único módulo (`js/core/estado.js`), salvo no `localStorage`. As telas não alteram os dados diretamente: chamam funções como `trocar`, `enviar` e `receber`, que validam o saldo, aplicam a operação inteira ou nenhuma parte dela e avisam quem está ouvindo. O evento `storage` mantém outras abas abertas atualizadas.
+
+**Gráficos.** As curvas são desenhadas em SVG, sem biblioteca, com suavização Catmull-Rom convertida para curvas de Bézier. O gráfico principal soma, em cada ponto do período, o valor de todas as moedas da carteira. A dica do gráfico usa Pointer Events, então funciona com mouse, toque e também com as setas do teclado.
+
+**Alertas.** A cada cotação recebida, os alertas salvos são comparados com o preço atual. Um alerta que já estaria atingido no momento da criação é recusado, e cada alerta dispara uma única vez.
+
+**Organização.** O código usa módulos JavaScript (`import`/`export`). O que é compartilhado fica em `js/core/`: catálogo de moedas, cotações, estado da carteira, alertas, formatação e regras do nome. Cada tela tem um arquivo próprio em `js/`.
 
 **Responsividade.** São três layouts: no computador, com menu lateral; no tablet; e no celular, com uma barra de navegação fixa na parte de baixo, como em um aplicativo.
 
@@ -55,9 +63,17 @@ swap.html           troca entre moedas
 enviar.html · receber.html · atividade.html · configuracoes.html
 css/                um arquivo de estilo por página
 js/
-  script.js         início: cotações, saldo e gráficos
-  cotacoes.js       cotações ao vivo usadas pela carteira e pelo swap
-  nome.js           tela do nome e filtro de palavrões
+  core/
+    moedas.js       catálogo das 9 moedas (nome, logo, cores, endereço de exemplo)
+    estado.js       saldos e histórico da carteira
+    cotacoes.js     cotações ao vivo e histórico dos gráficos
+    alertas.js      alertas de preço e notificações
+    formato.js      valores, datas e números no padrão brasileiro
+    nome.js         regras do nome e filtro de palavrões
+    sessao.js       "Sair": apaga nome, carteira e alertas
+  inicio.js         início: saldo, gráfico interativo e moedas
+  notificacoes.js   painel do sino e formulário de alertas
+  tela-nome.js      tela que pergunta o nome
   splash.js         animação de entrada
   ...               um arquivo por página
 img/                logos das moedas e ícones
@@ -66,7 +82,7 @@ docs/prints/        imagens deste README
 
 ## Como executar
 
-O projeto não tem dependências. Basta abrir o `index.html` no navegador ou servir a pasta com um servidor estático:
+O projeto não tem dependências, mas precisa ser servido por HTTP: os navegadores não carregam módulos JavaScript abertos direto do disco (`file://`). Qualquer servidor estático serve:
 
 ```bash
 git clone https://github.com/gustavo-s-dev/KYLRO.git

@@ -7,11 +7,12 @@
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="description" content="Simule trocas entre criptomoedas pela cotação do momento: pague com BTC, SOL ou AAVE e receba USDT, ETH, XRP e outras.">
   <meta name="theme-color" content="#4c0fd0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/swap.css?v=20261127">
+  <link rel="stylesheet" href="css/swap.css?v=20261127b">
 </head>
 <body>
   <main class="swap">
@@ -54,10 +55,11 @@
     </div>
 
     <div class="slider" id="slider">
-      <span class="slider-thumb" id="sliderThumb">
-        <svg viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9"/></svg>
+      <span class="slider-thumb" id="sliderThumb" role="button" tabindex="0"
+            aria-label="Confirmar swap: deslize para a direita ou pressione Enter">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12.5l4 4 8-9"/></svg>
       </span>
-      <span class="slider-text" id="sliderText">deslize para swap</span>
+      <span class="slider-text" id="sliderText" aria-live="polite">deslize para swap</span>
       <span class="slider-arrows">
         <svg viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M14 6l6 6-6 6"/></svg>
         <svg viewBox="0 0 24 24" class="soft"><path d="M4 12h16"/><path d="M14 6l6 6-6 6"/></svg>
@@ -80,7 +82,6 @@
     </div>
   </div>
 
-  <script src="js/cotacoes.js?v=20261127"></script>
-  <script src="js/swap.js?v=20261127"></script>
+  <script type="module" src="js/swap.js?v=20261127b"></script>
 </body>
 </html>

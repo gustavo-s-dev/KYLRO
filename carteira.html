@@ -7,11 +7,12 @@
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <meta name="description" content="Suas moedas na KYLRO com o valor em reais atualizado ao vivo e a variação das últimas 24 horas.">
   <meta name="theme-color" content="#4c0fd0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/carteira.css?v=20261127">
+  <link rel="stylesheet" href="css/carteira.css?v=20261127b">
 </head>
 <body>
   <main class="carteira">
@@ -28,14 +29,31 @@
 
     <section class="ativos">
       <h2 class="ativos-titulo">Meus ativos</h2>
-      <p class="ativos-qtd" id="qtd"></p>
+      <p class="ativos-qtd" id="qtd">
+        <span class="ao-vivo" id="aoVivo" data-estado="carregando"><i></i>carregando</span>
+        <span class="contagem"></span>
+      </p>
 
-      <!-- preenchido por js/carteira.js -->
+      <!-- preenchido por js/carteira.js a partir do estado da carteira -->
       <div class="lista" id="lista"></div>
+
+      <p class="total">Total <strong id="total">R$ —</strong></p>
+
+      <!-- volta aos saldos iniciais (útil para quem está testando o projeto) -->
+      <div class="reiniciar">
+        <button type="button" class="reiniciar-btn" id="reiniciarBtn">Reiniciar demonstração</button>
+        <div class="reiniciar-confirmar" id="reiniciarConfirmar" hidden>
+          <p>Voltar aos saldos iniciais e apagar o histórico?</p>
+          <div>
+            <button type="button" class="cancelar">Cancelar</button>
+            <button type="button" class="confirmar">Reiniciar</button>
+          </div>
+        </div>
+        <p class="reiniciar-aviso" id="reiniciarAviso" role="status"></p>
+      </div>
     </section>
   </main>
 
-  <script src="js/cotacoes.js?v=20261127"></script>
-  <script src="js/carteira.js?v=20261127"></script>
+  <script type="module" src="js/carteira.js?v=20261127b"></script>
 </body>
 </html>

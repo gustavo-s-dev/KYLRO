@@ -249,7 +249,7 @@ svg {
   margin-top: 28px;
   height: 45px;
   border-radius: 10px;
-  background: var(--verde);
+  background: #22965f; /* verde mais escuro: o texto branco fica legível (contraste 3,75) */
   color: #fff;
   font-size: 20px;
   font-weight: 700;
@@ -301,3 +301,13 @@ svg {
 @media (max-width: 340px) {
   #carteira { font-size: 10.4px; padding: 0 12px; }
 }
+
+/* logos das moedas: mesma caixa quadrada para todas, sem distorcer */
+.ativo-logo .logo-moeda { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: contain; }
+/* logos escuros (ETH, XRP) ganham um círculo claro atrás para aparecer no fundo roxo */
+.logo-claro { background: #f1ecff; border-radius: 50%; padding: 16%; }
+
+.disponivel { margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--suave); text-align: right; }
+.aviso a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.btn-enviar:disabled { cursor: default; filter: saturate(.6) brightness(.85); }
+.ativo-lista { max-height: 260px; overflow-y: auto; }

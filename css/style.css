@@ -232,19 +232,15 @@ svg {
 .coin-logo {
   width: 30px;
   height: 30px;
-  border-radius: 50%;
   display: grid;
   place-items: center;
   margin-top: 40px;
 }
-.coin-logo.btc {
-  background: #f7931a;
-  color: #fff;
-  font-weight: 700;
-  font-size: 18px;
-}
-.coin-logo.sol { width: 36px; border-radius: 0; }
-.coin-logo svg { width: 100%; height: 100%; stroke: none; }
+
+/* logos das moedas: mesma caixa quadrada para todas, sem distorcer */
+.logo-moeda { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: contain; }
+/* logos escuros (ETH, XRP) ganham um círculo claro atrás para aparecer no fundo roxo */
+.logo-claro { background: #f1ecff; border-radius: 50%; padding: 16%; }
 
 .coin-name {
   text-align: center;
@@ -252,9 +248,9 @@ svg {
   font-weight: 600;
   letter-spacing: .5px;
 }
-.btc-c { color: #f5922a; }
-.sol-c { color: #9d6cff; }
-.aave-c { color: #b6a6ff; }
+
+.coins-vazio { margin: auto 0; padding: 20px; text-align: center; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.coins-vazio a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
 
 .spark { width: 100%; height: 76px; }
 .spark svg { width: 100%; height: 100%; display: block; }
@@ -517,7 +513,10 @@ svg {
   .eye svg { width: 26px; height: 26px; }
   .ranges { width: 100%; gap: 10px; }
   .range { flex: 1; height: 40px; font-size: 14px; border-radius: 10px; }
-  .balance-value { margin-top: 18px; gap: 16px; flex-wrap: wrap; }
+  /* saldo e variação na primeira linha, "ao vivo" sempre na segunda: assim nada pula
+     quando o valor muda de largura (antes o selo trocava de linha e empurrava a tela) */
+  .balance-value { margin-top: 18px; display: grid; grid-template-columns: auto auto; justify-content: start; align-items: center; gap: 12px 16px; }
+  .balance-value .ao-vivo { grid-column: 1 / -1; justify-self: start; }
   .balance-value strong { font-size: 32px; }
   .variation { font-size: 16px; }
   .actions { gap: 12px; margin-top: 22px; }
@@ -539,8 +538,6 @@ svg {
     border-radius: 16px;
   }
   .coin-logo { width: 44px; height: 44px; margin-top: 0; }
-  .coin-logo.btc { font-size: 24px; }
-  .coin-logo.sol { width: 40px; height: 32px; justify-self: center; }
   .coin-name { text-align: left; font-size: 16px; }
   .spark { height: 44px; margin-top: 4px; }
   .coin-info { margin-top: 0; padding-left: 0; font-size: 15px; }
@@ -607,3 +604,212 @@ svg {
 
 @keyframes modal-aparecer { from { opacity: 0; } to { opacity: 1; } }
 @keyframes modal-subir { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ===== GRÁFICO INTERATIVO: valor e horário de cada ponto ===== */
+.chart { cursor: crosshair; touch-action: pan-y; outline: none; }
+.chart:focus-visible { box-shadow: inset 0 0 0 2px rgba(199, 167, 255, .6); border-radius: 12px; }
+.chart.explorando .chart-dot { opacity: 0; }
+
+.chart-mira {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1.5px dashed rgba(199, 167, 255, .45);
+  pointer-events: none;
+}
+.chart-mira[hidden] { display: none; }
+.chart-mira-ponto {
+  position: absolute;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #8b5cf6;
+  box-shadow: 0 0 0 5px rgba(139, 92, 246, .25);
+  transform: translate(-50%, -50%);
+}
+
+.chart-dica {
+  position: absolute;
+  top: 10px;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(30, 6, 82, .92);
+  border: 1px solid rgba(185, 162, 245, .25);
+  box-shadow: 0 8px 24px rgba(10, 0, 40, .4);
+  white-space: nowrap;
+  text-align: center;
+  pointer-events: none;
+  z-index: 3;
+}
+.chart-dica[hidden] { display: none; }
+.chart-dica strong { display: block; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.chart-dica > span { display: block; margin-top: 2px; font-size: 11.5px; color: var(--muted); }
+.chart-dica .up { color: var(--green); }
+.chart-dica .down { color: #ff5b6e; font-weight: 600; }
+
+/* ===== NOTIFICAÇÕES E ALERTAS DE PREÇO ===== */
+.badge {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff2d3d;
+  box-shadow: 0 0 0 2px #2e0a78;
+}
+.badge[hidden] { display: none; }
+.notif.balanca svg { animation: sino 0.7s ease; transform-origin: 50% 10%; }
+@keyframes sino {
+  20% { transform: rotate(14deg); }
+  40% { transform: rotate(-12deg); }
+  60% { transform: rotate(8deg); }
+  80% { transform: rotate(-4deg); }
+}
+
+.pop-notif { width: 340px; max-height: min(78vh, 620px); overflow-y: auto; overscroll-behavior: contain; }
+.pop-cabeca { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pop-link {
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 8px;
+  margin: -6px -8px;
+  border-radius: 6px;
+}
+.pop-link:hover { color: #fff; background: rgba(255, 255, 255, .07); }
+
+.notif-lista { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.notif-lista:empty { display: none; }
+.notif {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .05);
+}
+.notif.nova { background: rgba(139, 92, 246, .22); }
+.notif-ic {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--chip);
+  display: grid;
+  place-items: center;
+  color: #c7a7ff;
+}
+.notif-ic svg { width: 16px; height: 16px; }
+.notif strong { display: block; font-size: 13px; font-weight: 600; }
+.notif span { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); }
+
+.pop-vazio[hidden] { display: none; }
+
+.alertas { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, .1); }
+.pop-subtitulo { font-size: 14px; font-weight: 600; }
+.alerta-lista { list-style: none; margin-top: 8px; display: flex; flex-direction: column; gap: 4px; }
+.alerta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .05);
+  font-size: 13px;
+}
+.alerta .logo-moeda { width: 22px; height: 22px; flex-shrink: 0; }
+.alerta span { flex: 1; }
+.alerta-remover {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+}
+.alerta-remover:hover { background: rgba(255, 255, 255, .08); color: #fff; }
+.alerta-remover svg { width: 16px; height: 16px; }
+.alerta-vazio { font-size: 12.5px; color: var(--muted); padding: 2px 0; }
+
+.alerta-form { margin-top: 12px; }
+.alerta-frase { font-size: 12.5px; color: var(--muted); margin-bottom: 6px; }
+.alerta-linha { display: flex; gap: 8px; margin-top: 8px; }
+.alerta-form select,
+.alerta-valor {
+  height: 40px;
+  border-radius: 9px;
+  border: 1px solid rgba(185, 162, 245, .28);
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
+  font: 500 13px/1 'Poppins', sans-serif;
+}
+.alerta-form select { flex: 1; min-width: 0; padding: 0 8px; }
+.alerta-form select option { background: #3a118f; color: #fff; }
+.alerta-valor { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px; padding-left: 10px; }
+.alerta-valor span { color: var(--muted); font-size: 13px; }
+.alerta-valor input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  background: none;
+  color: #fff;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+}
+.alerta-form select:focus-visible,
+.alerta-valor:focus-within { border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, .25); outline: none; }
+.alerta-criar {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 9px;
+  background: linear-gradient(90deg, #7c3aed, #5b6cff);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.alerta-criar:hover { filter: brightness(1.1); }
+.alerta-dica { min-height: 18px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+.alerta-dica.erro { color: #ff8a98; }
+.alerta-dica.ok { color: var(--green); }
+
+/* aviso que aparece quando um alerta é atingido */
+.toast {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  left: 50%;
+  z-index: 50;
+  width: min(360px, calc(100vw - 32px));
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: #3a118f;
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 40px rgba(10, 0, 40, .55);
+  transform: translateX(-50%);
+  animation: toast-entra .35s cubic-bezier(.16, 1, .3, 1);
+}
+.toast[hidden] { display: none; }
+.toast.saindo { animation: toast-sai .3s ease forwards; }
+.toast strong { display: block; font-size: 14px; font-weight: 600; }
+.toast span { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
+@keyframes toast-entra { from { opacity: 0; transform: translate(-50%, -12px); } }
+@keyframes toast-sai { to { opacity: 0; transform: translate(-50%, -12px); } }
+
+@media (max-width: 700px) {
+  .badge { top: 8px; right: 9px; }
+  .pop-notif { width: 340px; max-height: calc(100vh - 190px); }
+  .alerta-form select, .alerta-valor, .alerta-criar { height: 46px; font-size: 14px; }
+  .alerta-valor input { font-size: 16px; } /* 16px: o iPhone não dá zoom no campo */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notif.balanca svg, .toast, .toast.saindo { animation: none; }
+}

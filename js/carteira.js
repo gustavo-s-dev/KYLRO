@@ -1,75 +1,117 @@
 /* ===========================
    KYLRO - Carteira
+   Lista as moedas do estado da carteira com o valor ao vivo:
+   verde quando a moeda subiu nas últimas 24 h, vermelho quando caiu.
    =========================== */
 
-// ativos do usuário (mesmas quantidades do dashboard); o valor vem das cotações ao vivo
-const ativos = [
-  { nome: 'Bitcoin', moeda: 'btc',  qtd: 0.01, simbolo: 'BTC',  icone: 'btc' },
-  { nome: 'AAVE',    moeda: 'aave', qtd: 5.73, simbolo: 'AAVE', icone: 'aave' },
-  { nome: 'Solana',  moeda: 'sol',  qtd: 5,    simbolo: 'SOL',  icone: 'sol' }
-];
+import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127b';
+import * as Estado from './core/estado.js?v=20261127b';
+import * as Cotacoes from './core/cotacoes.js?v=20261127b';
+import { brl, pct, qtd } from './core/formato.js?v=20261127b';
 
-/* ---------- Ícones (img/bitcoin.svg, img/aave.svg, img/solana.svg) ---------- */
-const icones = {
-  btc: `<svg viewBox="0 0 30 30"><path d="M29.5512 18.6286C27.5476 26.6644 19.4077 31.5548 11.3701 29.5509C3.33579 27.5476 -1.55518 19.4081 0.449278 11.373C2.45198 3.33629 10.5919 -1.55451 18.627 0.448851C26.6641 2.45221 31.5548 10.5926 29.551 18.6287L29.5511 18.6286H29.5512Z" fill="#F7931A"/><path d="M21.615 12.8629C21.9136 10.8667 20.3937 9.79367 18.3153 9.07786L18.9896 6.37387L17.3434 5.96373L16.687 8.59653C16.2543 8.4886 15.8098 8.38691 15.3681 8.2861L16.0292 5.63592L14.3841 5.22578L13.7095 7.92889C13.3513 7.84736 12.9996 7.76678 12.6583 7.68188L12.6602 7.67337L10.3901 7.10655L9.95218 8.86458C9.95218 8.86458 11.1735 9.14451 11.1478 9.16174C11.8144 9.3281 11.9349 9.76933 11.9149 10.1191L11.1469 13.1995C11.1928 13.2112 11.2523 13.2281 11.318 13.2545C11.2631 13.2408 11.2047 13.2259 11.144 13.2114L10.0675 17.5267C9.98606 17.7292 9.77928 18.0331 9.31321 17.9177C9.32971 17.9416 8.11674 17.6192 8.11674 17.6192L7.29944 19.5033L9.44168 20.0373C9.84021 20.1372 10.2308 20.2418 10.6154 20.3401L9.93415 23.0751L11.5784 23.4853L12.253 20.7793C12.7022 20.9012 13.1382 21.0137 13.5649 21.1197L12.8926 23.8129L14.5389 24.2231L15.22 21.4932C18.0271 22.0244 20.1378 21.8102 21.0262 19.2715C21.7421 17.2275 20.9906 16.0486 19.5138 15.2797C20.5894 15.0317 21.3996 14.3243 21.6156 12.8631L21.6151 12.8627L21.615 12.8629ZM17.8539 18.1364C17.3451 20.1804 13.9033 19.0754 12.7874 18.7984L13.6914 15.175C14.8072 15.4535 18.3856 16.0047 17.854 18.1364H17.8539ZM18.363 12.8332C17.8989 14.6925 15.0342 13.7479 14.105 13.5163L14.9246 10.2301C15.8538 10.4617 18.8464 10.894 18.3631 12.8332H18.363Z" fill="white"/></svg>`,
-  aave: `<svg viewBox="0 0 30 30"><path d="M30 15.0079C30 6.70866 23.2913 0 15.0079 0C6.72441 0 0 6.70866 0 15.0079C0 23.3071 6.70866 30.0157 15.0079 30.0157C23.3071 30.0157 30 23.2913 30 15.0079Z" fill="#9391F7"/><path d="M12.2047 15.7323C13.496 15.5276 14.3622 14.315 14.1574 13.0236C13.9527 11.7323 12.7401 10.8661 11.4488 11.0709C10.1574 11.2756 9.29128 12.4882 9.49601 13.7795C9.71648 15.0709 10.9291 15.937 12.2047 15.7323ZM18.3779 15.7323C19.6692 15.5276 20.5354 14.315 20.3307 13.0236C20.1259 11.7323 18.9133 10.8661 17.622 11.0709C16.3307 11.2756 15.4645 12.4882 15.6692 13.7795C15.874 15.0709 17.0866 15.937 18.3779 15.7323Z" fill="white"/><path d="M14.9134 3.66928C8.50398 3.66928 3.30713 8.96062 3.30713 15.4803H6.26776C6.26776 10.5827 10.1103 6.62991 14.8977 6.62991C19.7008 6.62991 23.5276 10.5984 23.5276 15.4803H26.4882C26.5197 8.96062 21.3229 3.66928 14.9134 3.66928Z" fill="white"/></svg>`,
-  sol: `<svg viewBox="0 0 30 30"><defs><linearGradient id="sol0" x1="27.2225" y1="-3.60494" x2="3.4452" y2="32.0898" gradientUnits="userSpaceOnUse"><stop stop-color="#00FFA3"/><stop offset="1" stop-color="#DC1FFF"/></linearGradient><linearGradient id="sol1" x1="19.9771" y1="-8.43132" x2="-3.80021" y2="27.2634" gradientUnits="userSpaceOnUse"><stop stop-color="#00FFA3"/><stop offset="1" stop-color="#DC1FFF"/></linearGradient><linearGradient id="sol2" x1="23.5767" y1="-6.03349" x2="-0.200568" y2="29.6612" gradientUnits="userSpaceOnUse"><stop stop-color="#00FFA3"/><stop offset="1" stop-color="#DC1FFF"/></linearGradient></defs><path d="M4.87308 22.897C5.05412 22.666 5.30305 22.5313 5.56707 22.5313H29.5097C29.9473 22.5313 30.166 23.205 29.8567 23.5996L25.127 29.6343C24.946 29.8653 24.6971 30 24.433 30H0.490375C0.0528594 30 -0.165898 29.3263 0.14338 28.9317L4.87308 22.897Z" fill="url(#sol0)"/><path d="M4.87308 0.365736C5.06166 0.134745 5.31059 0 5.56707 0H29.5097C29.9473 0 30.166 0.673725 29.8567 1.06833L25.127 7.10298C24.946 7.33397 24.6971 7.46872 24.433 7.46872H0.490375C0.0528594 7.46872 -0.165898 6.79499 0.14338 6.40038L4.87308 0.365736Z" fill="url(#sol1)"/><path d="M25.127 11.5592C24.946 11.3282 24.6971 11.1935 24.433 11.1935H0.490375C0.0528594 11.1935 -0.165898 11.8672 0.14338 12.2618L4.87308 18.2964C5.05412 18.5274 5.30305 18.6622 5.56707 18.6622H29.5097C29.9473 18.6622 30.166 17.9884 29.8567 17.5938L25.127 11.5592Z" fill="url(#sol2)"/></svg>`
-};
-
-/* ---------- Renderização ---------- */
-const brl = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const pctTexto = p => `${p >= 0 ? '+' : '-'} ${Math.abs(p).toFixed(2).replace('.', ',')}%`;
-const qtdTexto = a => `${a.qtd.toLocaleString('pt-BR', { maximumFractionDigits: 8 })} ${a.simbolo}`;
-
+const lista = document.getElementById('lista');
 const qtdEl = document.getElementById('qtd');
-const contagem = `${ativos.length} ${ativos.length === 1 ? 'ativo' : 'ativos'}`;
-qtdEl.innerHTML = `<span class="ao-vivo" id="aoVivo" data-estado="carregando"><i></i>carregando</span>${contagem}`;
+const totalEl = document.getElementById('total');
 
-document.getElementById('lista').innerHTML = ativos.map(a => `
-  <article class="item">
-    <span class="item-ic">${icones[a.icone]}</span>
-    <div class="item-info">
-      <h3 class="item-nome">${a.nome}</h3>
-      <p class="item-qtd">${qtdTexto(a)}</p>
-    </div>
-    <div class="item-direita">
-      <p class="item-valor carregando" id="valor-${a.moeda}">R$ —</p>
-      <p class="item-var" id="var-${a.moeda}">24 h</p>
-    </div>
-  </article>`).join('');
-
-/* ---------- Cotações ao vivo ---------- */
-const ESTADO = { binance: ['vivo', 'ao vivo'], gecko: ['atrasado', 'a cada 30 s'], simulado: ['simulado', 'offline'] };
+const ESTADO_FONTE = { binance: ['vivo', 'ao vivo'], gecko: ['atrasado', 'a cada 30 s'], simulado: ['simulado', 'offline'] };
 const anteriores = {};
 
-Cotacoes.iniciar(ativos.map(a => a.moeda), (dados, fonte) => {
+// valor em reais de cada moeda (para ordenar da maior para a menor)
+const valorDe = (m) => Estado.saldo(m) * (Cotacoes.precos()[m] || 0);
+
+function render() {
+  const moedas = Estado.moedasComSaldo().sort((a, b) => valorDe(b) - valorDe(a));
+  const n = moedas.length;
+  qtdEl.querySelector('.contagem').textContent = `${n} ${n === 1 ? 'ativo' : 'ativos'}`;
+
+  if (!n) {
+    lista.innerHTML = `<p class="vazio">Sua carteira está vazia. <a href="receber.html">Simule um recebimento</a> para começar.</p>`;
+    totalEl.textContent = brl(0);
+    return;
+  }
+
+  lista.innerHTML = moedas.map((m) => `
+    <article class="item">
+      <span class="item-ic">${logoHTML(m)}</span>
+      <div class="item-info">
+        <h3 class="item-nome">${MOEDAS[m].nome}</h3>
+        <p class="item-qtd">${qtd(m, Estado.saldo(m))}</p>
+      </div>
+      <div class="item-direita">
+        <p class="item-valor carregando" id="valor-${m}">R$ —</p>
+        <p class="item-var" id="var-${m}">24 h</p>
+      </div>
+    </article>`).join('');
+  atualizarValores();
+}
+
+function atualizarValores() {
+  const fonte = Cotacoes.fonteAtual();
+  if (!fonte) return;
   const aoVivo = document.getElementById('aoVivo');
-  const [estado, texto] = ESTADO[fonte];
+  const [estado, texto] = ESTADO_FONTE[fonte];
   aoVivo.dataset.estado = estado;
   aoVivo.lastChild.textContent = texto;
 
-  ativos.forEach(a => {
-    const d = dados[a.moeda];
-    if (!d) return;
-    const valor = a.qtd * d.preco;
-    const pct = ((d.preco - d.abertura) / d.abertura) * 100;
-    const cor = pct >= 0 ? 'up' : 'down';
+  let total = 0;
+  let completo = true;
+  Estado.moedasComSaldo().forEach((m) => {
+    const d = Cotacoes.dadosDe(m);
+    const valorEl = document.getElementById(`valor-${m}`);
+    if (!d || !valorEl) { completo = false; return; }
+    const valor = Estado.saldo(m) * d.preco;
+    const p = ((d.preco - d.abertura) / d.abertura) * 100;
+    const cor = p >= 0 ? 'up' : 'down';
+    total += valor;
 
-    // valor em verde se a moeda subiu nas últimas 24 h, vermelho se caiu
-    const valorEl = document.getElementById(`valor-${a.moeda}`);
     valorEl.textContent = brl(valor);
     valorEl.className = `item-valor ${cor}`;
-
-    const varEl = document.getElementById(`var-${a.moeda}`);
-    varEl.textContent = `${pctTexto(pct)} · 24 h`;
+    const varEl = document.getElementById(`var-${m}`);
+    varEl.textContent = `${pct(p)} · 24 h`;
     varEl.className = `item-var ${cor}`;
 
     // pisca de leve quando o valor muda, como o saldo do início
-    const antes = anteriores[a.moeda];
+    const antes = anteriores[m];
     if (antes !== undefined && Math.abs(valor - antes) >= 0.005) {
-      void valorEl.offsetWidth; // reinicia a animação
+      void valorEl.offsetWidth;
       valorEl.classList.add(valor > antes ? 'sobe' : 'desce');
     }
-    anteriores[a.moeda] = valor;
+    anteriores[m] = valor;
   });
+  if (completo) totalEl.textContent = brl(total);
+}
+
+let primeira = true;
+Cotacoes.assinar(() => {
+  if (primeira) {
+    primeira = false;
+    render(); // a primeira cotação define a ordem por valor
+  } else {
+    atualizarValores();
+  }
+});
+Estado.aoMudar(render);
+render();
+
+/* ---------- Reiniciar demonstração ---------- */
+const reiniciarBtn = document.getElementById('reiniciarBtn');
+const confirmar = document.getElementById('reiniciarConfirmar');
+
+reiniciarBtn.addEventListener('click', () => {
+  confirmar.hidden = false;
+  reiniciarBtn.hidden = true;
+  confirmar.querySelector('.cancelar').focus();
+});
+confirmar.querySelector('.cancelar').addEventListener('click', () => {
+  confirmar.hidden = true;
+  reiniciarBtn.hidden = false;
+  reiniciarBtn.focus();
+});
+confirmar.querySelector('.confirmar').addEventListener('click', () => {
+  Estado.reiniciar();
+  confirmar.hidden = true;
+  reiniciarBtn.hidden = false;
+  const aviso = document.getElementById('reiniciarAviso');
+  aviso.textContent = 'Pronto: a carteira voltou aos saldos iniciais.';
+  setTimeout(() => (aviso.textContent = ''), 3000);
 });

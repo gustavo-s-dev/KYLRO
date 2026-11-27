@@ -1,14 +1,12 @@
 /* ===========================
    KYLRO - Atividade
+   Histórico real da carteira simulada: cada swap, envio e recebimento feito no site
+   entra aqui com data e hora, agrupado por dia.
    =========================== */
 
-// movimentações de exemplo (simuladas)
-const movimentacoes = [
-  { dia: 'Hoje',  hora: '15:32', tipo: 'recebido', nome: 'Bitcoin recebido',  valor: '+ 0,002 BTC' },
-  { dia: 'Hoje',  hora: '11:15', tipo: 'swap',     nome: 'Swap BTC para USDT', valor: 'BTC para USDT' },
-  { dia: 'Hoje',  hora: '10:57', tipo: 'enviado',  nome: 'AAVE enviado',       valor: '− 0,01 AAVE' },
-  { dia: 'Ontem', hora: '21:13', tipo: 'recebido', nome: 'Sol recebido',       valor: '+ 2.6 SOL' }
-];
+import { MOEDAS } from './core/moedas.js?v=20261127b';
+import * as Estado from './core/estado.js?v=20261127b';
+import { qtd, rotuloDia, hora } from './core/formato.js?v=20261127b';
 
 /* ---------- Ícones (img/recebido.svg, img/enviado.svg, img/swap 3.svg) ---------- */
 const icones = {
@@ -17,32 +15,57 @@ const icones = {
   swap: `<svg class="ic-swap" viewBox="0 0 23 25"><path fill="#A020F0" d="M10.6639 21.899C10.6623 21.8943 10.6576 21.8912 10.6545 21.8872L8.41 18.3802C8.25062 18.1185 7.90531 18.0255 7.63499 18.1724L7.43499 18.2951C7.16624 18.4419 7.17171 18.8208 7.33109 19.0826L8.76937 21.3146C8.64671 21.2872 8.52249 21.2654 8.4014 21.2341C5.88265 20.5755 3.75062 18.8701 2.55374 16.556C1.42249 14.3708 1.20999 11.8763 1.95531 9.531C2.70062 7.18568 4.39125 5.27162 6.5764 4.14115C6.94828 3.94818 7.09359 3.49115 6.9014 3.11928C6.70921 2.74662 6.2514 2.60131 5.87953 2.79428C3.33421 4.11147 1.37718 6.34115 0.509214 9.0724C-0.358755 11.8037 -0.111099 14.7091 1.20609 17.2544C2.6014 19.9482 5.08343 21.9333 8.01859 22.7021C8.05218 22.7107 8.08656 22.7154 8.12015 22.724L6.13499 23.7302C5.86624 23.8779 5.77718 24.2091 5.93656 24.4708L6.01312 24.6708C6.17328 24.9326 6.44828 25.0255 6.71624 24.8787L10.3498 23.0185C10.3545 23.0154 10.3592 23.0162 10.3639 23.013L10.6077 22.8794C10.742 22.8052 10.8319 22.6849 10.867 22.5497C10.9037 22.4154 10.8866 22.2654 10.8077 22.1349L10.6639 21.899ZM20.8319 7.7935C19.4389 5.10053 17.0334 3.11537 14.0991 2.34662C13.8905 2.29193 13.6764 2.24975 13.4631 2.20678L15.4116 1.2185C15.6803 1.07084 15.8405 0.73881 15.6811 0.477091L15.6037 0.277872C15.4436 0.015372 15.0975 -0.0768155 14.8295 0.0692783L11.1959 1.92943C11.1912 1.93178 11.1866 1.931 11.1819 1.93412L10.9381 2.06772C10.803 2.14193 10.7139 2.26225 10.6787 2.3974C10.642 2.53178 10.6592 2.68178 10.7389 2.81147L10.8834 3.04897C10.8858 3.05365 10.8897 3.05678 10.8928 3.06147L13.1373 6.5685C13.2959 6.83022 13.642 6.92318 13.9116 6.77631L14.0881 6.65365C14.3569 6.50678 14.3741 6.12787 14.2155 5.86615L12.7701 3.62397C13.0881 3.67318 13.4037 3.73178 13.7131 3.81303C16.2334 4.47318 18.2881 6.17787 19.4842 8.48959C20.6155 10.6747 20.828 13.1693 20.0819 15.5138C19.3358 17.8583 17.7225 19.7724 15.5366 20.9052C15.1647 21.0982 15.0194 21.5544 15.2123 21.9271C15.3467 22.1865 15.6116 22.3365 15.8866 22.3365C16.0037 22.3365 16.1225 22.3091 16.235 22.2513C18.7811 20.9341 20.66 18.7044 21.5287 15.974C22.3967 13.2419 22.1491 10.3357 20.8311 7.79193L20.8319 7.7935Z"/></svg>`
 };
 
-const classeValor = { recebido: 'pos', enviado: 'neg', swap: '' };
+// título e valores de cada tipo de movimentação
+function descrever(m) {
+  if (m.tipo === 'recebido') {
+    return { titulo: `Recebimento de ${MOEDAS[m.moeda].nome}`, valor: `+ ${qtd(m.moeda, m.qtd)}`, classe: 'pos' };
+  }
+  if (m.tipo === 'enviado') {
+    return { titulo: `Envio de ${MOEDAS[m.moeda].nome}`, valor: `− ${qtd(m.moeda, m.qtd)}`, classe: 'neg' };
+  }
+  return {
+    titulo: `Swap de ${MOEDAS[m.de].simbolo} para ${MOEDAS[m.para].simbolo}`,
+    valor: `+ ${qtd(m.para, m.qtdPara)}`,
+    classe: 'pos',
+    detalhe: `− ${qtd(m.de, m.qtdDe)}`,
+  };
+}
 
 /* ---------- Renderização (agrupada por dia) ---------- */
 const lista = document.getElementById('lista');
 
 function render() {
+  const movimentacoes = Estado.historico();
+  if (!movimentacoes.length) {
+    lista.innerHTML = '<p class="vazio">Nenhuma movimentação ainda. Faça um swap, um envio ou simule um recebimento.</p>';
+    return;
+  }
+
   let html = '';
   let diaAtual = null;
-
-  movimentacoes.forEach(m => {
-    if (m.dia !== diaAtual) {
-      diaAtual = m.dia;
-      html += `<h2 class="dia">${m.dia}</h2>`;
+  movimentacoes.forEach((m) => {
+    const dia = rotuloDia(m.quando);
+    if (dia !== diaAtual) {
+      diaAtual = dia;
+      html += `<h2 class="dia">${dia}</h2>`;
     }
+    const d = descrever(m);
     html += `
       <article class="item">
         <span class="item-ic">${icones[m.tipo]}</span>
         <div class="item-info">
-          <h3 class="item-nome">${m.nome}</h3>
-          <p class="item-hora">${m.dia}, ${m.hora}</p>
+          <h3 class="item-nome">${d.titulo}</h3>
+          <p class="item-hora">${dia}, ${hora(m.quando)}</p>
         </div>
-        <p class="item-valor ${classeValor[m.tipo]}">${m.valor}</p>
+        <div class="item-direita">
+          <p class="item-valor ${d.classe}">${d.valor}</p>
+          ${d.detalhe ? `<p class="item-detalhe">${d.detalhe}</p>` : ''}
+        </div>
       </article>`;
   });
-
   lista.innerHTML = html;
 }
 
+// outra aba fez uma operação: a lista atualiza sozinha
+Estado.aoMudar(render);
 render();

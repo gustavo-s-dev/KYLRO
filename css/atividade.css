@@ -170,3 +170,9 @@ svg {
 @media (max-width: 380px) {
   .item-valor { white-space: normal; max-width: 90px; }
 }
+
+/* valor recebido em cima e valor pago embaixo (swap) */
+.item-direita { text-align: right; align-self: flex-start; }
+.item-detalhe { margin-top: 6px; font-size: 13px; font-weight: 600; color: var(--suave); white-space: nowrap; }
+.vazio { margin-top: 32px; font-size: 14px; color: var(--suave); line-height: 1.6; }
+@media (max-width: 600px) { .item-detalhe { font-size: 12px; } }
