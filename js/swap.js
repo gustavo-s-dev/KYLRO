@@ -5,9 +5,9 @@
    da carteira: os saldos mudam e a operação entra na Atividade.
    =========================== */
 
-import { MOEDAS, IDS, logoHTML } from './core/moedas.js?v=20261127c';
-import * as Estado from './core/estado.js?v=20261127c';
-import * as Cotacoes from './core/cotacoes.js?v=20261127c';
+import { MOEDAS, IDS, logoHTML } from './core/moedas.js?v=20261127d';
+import * as Estado from './core/estado.js?v=20261127d';
+import * as Cotacoes from './core/cotacoes.js?v=20261127d';
 
 const MINIMO_REAIS = 50; // valor mínimo de uma troca
 

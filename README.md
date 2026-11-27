@@ -71,6 +71,7 @@ js/
     formato.js      valores, datas e números no padrão brasileiro
     nome.js         regras do nome e filtro de palavrões
     sessao.js       "Sair": apaga nome, carteira e alertas
+    navegacao.js    barra de navegação do celular nas páginas internas
   inicio.js         início: saldo, gráfico interativo e moedas
   notificacoes.js   painel do sino e formulário de alertas
   tela-nome.js      tela que pergunta o nome

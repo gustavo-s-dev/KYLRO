@@ -4,13 +4,13 @@
    vêm do estado da carteira (js/core/estado.js), o mesmo usado por Swap, Enviar e Receber.
    =========================== */
 
-import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127c';
-import * as Estado from './core/estado.js?v=20261127c';
-import * as Cotacoes from './core/cotacoes.js?v=20261127c';
-import * as Nome from './core/nome.js?v=20261127c';
-import { sair } from './core/sessao.js?v=20261127c';
-import { brl, pct, rotuloDia, hora } from './core/formato.js?v=20261127c';
-import { iniciarNotificacoes, aoAbrirPainel } from './notificacoes.js?v=20261127c';
+import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127d';
+import * as Estado from './core/estado.js?v=20261127d';
+import * as Cotacoes from './core/cotacoes.js?v=20261127d';
+import * as Nome from './core/nome.js?v=20261127d';
+import { sair } from './core/sessao.js?v=20261127d';
+import { brl, pct, rotuloDia, hora } from './core/formato.js?v=20261127d';
+import { iniciarNotificacoes, aoAbrirPainel } from './notificacoes.js?v=20261127d';
 
 /* ---------- Curvas ---------- */
 // leva qualquer série de preços para a faixa 0–1 (o gráfico usa a altura toda)
@@ -422,14 +422,9 @@ window.addEventListener('kylro:nome', (e) => {
 aplicarNome();
 
 /* ---------- Menu lateral e botões ---------- */
-document.querySelectorAll('.menu .menu-item').forEach((item) => {
-  item.addEventListener('click', (e) => {
-    // links reais (ex.: swap.html) navegam normalmente; só "#" é bloqueado
-    if (item.getAttribute('href') === '#') e.preventDefault();
-    document.querySelectorAll('.menu .menu-item').forEach((i) => i.classList.remove('active'));
-    item.classList.add('active');
-  });
-});
+// o destaque fica sempre no Início (esta página): marcar o item tocado antes de navegar
+// deixava o item errado aceso ao voltar pelo botão do celular
+document.querySelector('.menu .menu-item[href="#"]').addEventListener('click', (e) => e.preventDefault());
 document.getElementById('sendBtn').addEventListener('click', () => (window.location.href = 'enviar.html'));
 document.getElementById('receiveBtn').addEventListener('click', () => (window.location.href = 'receber.html'));
 

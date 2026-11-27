@@ -1,0 +1,63 @@
+/* ===========================
+   KYLRO - Barra de navegação do celular (páginas internas)
+   Mesmas medidas da barra do início (css/style.css): fixa embaixo, só até 700px.
+   No computador as páginas internas continuam só com a seta de voltar.
+   =========================== */
+
+.nav-app { display: none; }
+
+@media (max-width: 700px) {
+  /* espaço no fim da página para o conteúdo não ficar atrás da barra */
+  body { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+
+  .nav-app {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9; /* abaixo das janelas e da lista de moedas (z-index 10), que cobrem a barra quando abertas */
+    display: flex;
+    justify-content: space-around;
+    gap: 2px;
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: #4509b8;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -10px 30px rgba(10, 0, 40, .45);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .nav-app a {
+    flex: 1;
+    min-width: 0;
+    min-height: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 12px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    opacity: .72;
+    transition: opacity .2s, background .2s;
+  }
+  .nav-app a[aria-current="page"] { opacity: 1; background: rgba(255, 255, 255, .14); font-weight: 600; }
+
+  .nav-app svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .nav-app span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+@media (max-width: 360px) {
+  .nav-app a { font-size: 10px; }
+}

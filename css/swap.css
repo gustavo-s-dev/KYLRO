@@ -347,3 +347,6 @@ svg {
 .slider-thumb:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 .slider.erro { background: #ffc2ca; }
 .slider.erro .slider-text { color: #8a1020; }
+
+/* celular: a barra de navegação já reserva espaço embaixo */
+@media (max-width: 700px) { .swap { min-height: 0; } }
