@@ -1,48 +1,50 @@
-# KYLRO — carteira de criptomoedas (simulação)
+# KYLRO
 
-**Sua cripto. Seu controle.** Uma carteira de criptomoedas responsiva, feita com HTML, CSS e JavaScript puros, que mostra cotações reais em tempo real.
+Uma carteira de criptomoedas simulada, com cotações reais atualizadas ao vivo. Fiz o projeto com HTML, CSS e JavaScript puros, sem frameworks nem bibliotecas.
 
-**[Ver o site no ar →](https://gustavo-s-dev.github.io/KYLRO/)**
+[Ver o site no ar](https://gustavo-s-dev.github.io/KYLRO/)
 
 > [!IMPORTANT]
-> **Este projeto é uma simulação, feita para portfólio.** O saldo, as quantidades de cada moeda, os envios, os recebimentos e as trocas (swap) são fictícios. Nenhuma transação acontece de verdade e o site não pede nenhum dado real. **Só as cotações são reais**, vindas de APIs públicas. O nome digitado na entrada fica salvo apenas no seu navegador.
+> Este é um projeto de portfólio e funciona como uma simulação. Saldo, quantidades, envios, recebimentos e trocas são fictícios: nenhuma transação financeira acontece e o site não pede nenhum dado real. Apenas as cotações são reais, vindas de APIs públicas. O nome digitado na entrada fica salvo só no navegador de quem acessa.
 
 ![Dashboard da KYLRO no computador](docs/prints/computador-inicio.png)
 
 <table>
   <tr>
-    <td align="center"><img src="docs/prints/celular-nome.png" width="190" alt="Tela que pergunta o nome antes de entrar"><br><sub>Entrada: pergunta o nome</sub></td>
-    <td align="center"><img src="docs/prints/celular-inicio.png" width="190" alt="Dashboard no celular com saldo e gráfico"><br><sub>Início com saldo ao vivo</sub></td>
-    <td align="center"><img src="docs/prints/celular-carteira.png" width="190" alt="Carteira com valores em tempo real"><br><sub>Carteira em tempo real</sub></td>
-    <td align="center"><img src="docs/prints/celular-swap.png" width="190" alt="Swap com a lista de moedas para receber"><br><sub>Swap com 9 moedas</sub></td>
+    <td align="center"><img src="docs/prints/celular-nome.png" width="190" alt="Tela que pergunta o nome antes de entrar"><br><sub>Entrada</sub></td>
+    <td align="center"><img src="docs/prints/celular-inicio.png" width="190" alt="Dashboard no celular com saldo e gráfico"><br><sub>Início</sub></td>
+    <td align="center"><img src="docs/prints/celular-carteira.png" width="190" alt="Carteira com valores em tempo real"><br><sub>Carteira</sub></td>
+    <td align="center"><img src="docs/prints/celular-swap.png" width="190" alt="Swap com a lista de moedas para receber"><br><sub>Swap</sub></td>
   </tr>
 </table>
 
-## O que dá para fazer
+## Funcionalidades
 
-- **Entrar com o seu nome.** Na primeira visita o site pergunta como te chamar e usa o nome no painel. Aceita qualquer nome (com acento, hífen ou apóstrofo) e recusa só palavrões, mesmo disfarçados ("PORRRA", "pu ta").
-- **Acompanhar o saldo ao vivo.** O valor da carteira e o gráfico mudam a cada segundo conforme o mercado, com períodos de 1 dia, 1 semana, 1 mês e 1 ano.
-- **Ver a carteira em tempo real.** Cada moeda mostra o valor em reais, em verde quando subiu e em vermelho quando caiu nas últimas 24 horas.
-- **Simular trocas (swap).** Você paga com o que tem na carteira (BTC, SOL ou AAVE) e escolhe o que receber entre 9 moedas (USDT, ETH, XRP, POL, TRX, UNI e as outras da carteira). A conversão usa a cotação do momento.
-- **Navegar pelas outras telas:** enviar, receber (com QR code), atividade e configurações.
+- Na primeira visita, o site pergunta o nome da pessoa e passa a usá-lo no painel. Qualquer nome é aceito, com acento, hífen ou apóstrofo; só palavrões são recusados, inclusive com letras repetidas ou separadas por espaço.
+- O saldo e o gráfico da carteira acompanham o mercado segundo a segundo, com os períodos de 1 dia, 1 semana, 1 mês e 1 ano.
+- Na Carteira, cada moeda mostra o valor em reais e a variação das últimas 24 horas, em verde quando subiu e em vermelho quando caiu.
+- No Swap, o pagamento é feito com as moedas da carteira (BTC, SOL ou AAVE) e é possível receber USDT, ETH, XRP, POL, TRX, UNI ou outra moeda da carteira, pela cotação do momento.
+- Também há telas de envio, recebimento (com QR code), atividade e configurações.
 
-## Como funciona por dentro
+## Como funciona
 
-- **Cotações em tempo real.** A fonte principal é a API da Binance: o site lê os preços uma vez e depois recebe atualizações a cada segundo por **WebSocket**. Se a conexão cair, ele reconecta sozinho e, enquanto isso, consulta o preço a cada 5 segundos.
-- **Plano B e plano C.** Se a Binance não responder (algumas redes e países bloqueiam), o site usa a **CoinGecko**, atualizada a cada 30 segundos. Se nenhuma das duas responder, mostra valores de exemplo e avisa "cotações offline".
-- **Moedas sem par em reais.** AAVE e as moedas novas do swap não são negociadas em reais na Binance. O preço em reais é calculado multiplicando o par em dólar (ex.: AAVE/USDT) pelo USDT em reais.
-- **Gráficos sem biblioteca.** As curvas são desenhadas em SVG, com suavização Catmull-Rom → Bézier, e o gráfico principal soma o valor de cada moeda da carteira em cada ponto do período.
-- **Responsivo de verdade.** Três layouts: computador (menu lateral), tablet e celular (barra de navegação fixa embaixo, como num aplicativo, com botões de pelo menos 44px para o toque).
-- **Atualização garantida.** Os links de CSS e JS levam um número de versão (`?v=`), para o navegador baixar os arquivos novos depois de cada publicação.
-- **Acessibilidade.** Rótulos para leitores de tela, navegação por teclado (Esc fecha janelas) e entrada sem animação para quem ativou "reduzir movimento" no aparelho.
+**Cotações.** A fonte principal é a API da Binance. O site busca os preços uma vez e depois recebe as atualizações por WebSocket, cerca de uma por segundo. Se a conexão cair, ele tenta reconectar e, enquanto isso, consulta os preços a cada 5 segundos. Quando a Binance não responde (algumas redes e países bloqueiam o acesso), os dados vêm da CoinGecko, consultada a cada 30 segundos. Se nenhuma das duas responder, o site mostra valores de exemplo e indica que as cotações estão offline.
+
+**Preços em reais.** BTC, SOL e USDT têm par em reais na Binance. Para as outras moedas, como a AAVE, uso o par em dólar (por exemplo, AAVE/USDT) e multiplico pela cotação do USDT em reais.
+
+**Gráficos.** As curvas são desenhadas em SVG, sem biblioteca, com suavização Catmull-Rom convertida para curvas de Bézier. O gráfico principal soma, em cada ponto do período, o valor de todas as moedas da carteira.
+
+**Responsividade.** São três layouts: no computador, com menu lateral; no tablet; e no celular, com uma barra de navegação fixa na parte de baixo, como em um aplicativo.
+
+**Acessibilidade.** Os botões que só têm ícone recebem rótulos para leitores de tela, as janelas fecham com Esc e a animação de entrada é desativada para quem ativou a opção de reduzir movimento no aparelho.
 
 ## Tecnologias
 
-- HTML5, CSS3 e JavaScript (sem frameworks e sem bibliotecas)
+- HTML5, CSS3 e JavaScript
 - WebSocket e Fetch API
 - APIs públicas da [Binance](https://developers.binance.com/docs/binance-spot-api-docs) e da [CoinGecko](https://docs.coingecko.com/)
 - SVG para gráficos e ícones
-- GitHub Pages com publicação automática pelo GitHub Actions
+- GitHub Pages, com publicação pelo GitHub Actions
 
 ## Estrutura
 
@@ -62,9 +64,9 @@ img/                logos das moedas e ícones
 docs/prints/        imagens deste README
 ```
 
-## Rodar no seu computador
+## Como executar
 
-Não precisa instalar nada. Baixe o projeto e abra o `index.html` no navegador, ou sirva a pasta com qualquer servidor estático:
+O projeto não tem dependências. Basta abrir o `index.html` no navegador ou servir a pasta com um servidor estático:
 
 ```bash
 git clone https://github.com/gustavo-s-dev/KYLRO.git
@@ -74,4 +76,4 @@ python -m http.server 8000   # depois abra http://localhost:8000
 
 ## Autor
 
-Feito por **Gustavo Silva** — [github.com/gustavo-s-dev](https://github.com/gustavo-s-dev)
+Gustavo Silva · [github.com/gustavo-s-dev](https://github.com/gustavo-s-dev)
