@@ -7,7 +7,7 @@
    qualquer uma pode estar na carteira (depois de um swap) ou num alerta de preço.
    =========================== */
 
-import { IDS } from './moedas.js?v=20261127e';
+import { IDS } from './moedas.js?v=20261127f';
 
 const BINANCE = 'https://api.binance.com/api/v3';
 const GECKO = 'https://api.coingecko.com/api/v3';

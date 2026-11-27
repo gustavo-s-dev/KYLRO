@@ -4,13 +4,13 @@
    vêm do estado da carteira (js/core/estado.js), o mesmo usado por Swap, Enviar e Receber.
    =========================== */
 
-import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127e';
-import * as Estado from './core/estado.js?v=20261127e';
-import * as Cotacoes from './core/cotacoes.js?v=20261127e';
-import * as Nome from './core/nome.js?v=20261127e';
-import { sair } from './core/sessao.js?v=20261127e';
-import { brl, pct, rotuloDia, hora } from './core/formato.js?v=20261127e';
-import { iniciarNotificacoes, aoAbrirPainel } from './notificacoes.js?v=20261127e';
+import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127f';
+import * as Estado from './core/estado.js?v=20261127f';
+import * as Cotacoes from './core/cotacoes.js?v=20261127f';
+import * as Nome from './core/nome.js?v=20261127f';
+import { sair } from './core/sessao.js?v=20261127f';
+import { brl, pct, rotuloDia, hora } from './core/formato.js?v=20261127f';
+import { iniciarNotificacoes, aoAbrirPainel } from './notificacoes.js?v=20261127f';
 
 /* ---------- Curvas ---------- */
 // leva qualquer série de preços para a faixa 0–1 (o gráfico usa a altura toda)
@@ -73,13 +73,13 @@ function desenharGraficoPrincipal(serie) {
 }
 
 // altura da curva desenhada num ponto x (busca binária ao longo da linha; x cresce com ela)
-function yNaCurva(alvoX) {
+function yNaCurva(alvoX, linha = mainLine) {
   let ini = 0;
-  let fim = mainLine.getTotalLength();
-  let ponto = mainLine.getPointAtLength(fim);
+  let fim = linha.getTotalLength();
+  let ponto = linha.getPointAtLength(fim);
   for (let i = 0; i < 30; i++) {
     const meio = (ini + fim) / 2;
-    ponto = mainLine.getPointAtLength(meio);
+    ponto = linha.getPointAtLength(meio);
     if (ponto.x < alvoX) ini = meio;
     else fim = meio;
   }
@@ -211,8 +211,23 @@ function montarSpark(el, m) {
       <path class="spark-area" fill="url(#f-${m})" stroke="none"/>
       <path class="spark-linha" fill="none" stroke="url(#s-${m})" stroke-width="4"
             stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-    </svg>`;
-  return { area: el.querySelector('.spark-area'), linha: el.querySelector('.spark-linha'), w, h };
+    </svg>
+    <div class="spark-mira" hidden><span class="spark-mira-ponto" style="border-color:${de}"></span></div>
+    <div class="spark-dica" hidden aria-hidden="true"><strong></strong><span></span></div>`;
+  const s = {
+    el, w, h,
+    area: el.querySelector('.spark-area'),
+    linha: el.querySelector('.spark-linha'),
+    mira: el.querySelector('.spark-mira'),
+    ponto: el.querySelector('.spark-mira-ponto'),
+    dica: el.querySelector('.spark-dica'),
+    valores: [],   // preço em reais em cada ponto das últimas 24 h
+    tempos: [],
+    t: null,       // posição do cursor (0 a 1) enquanto explora o minigráfico
+    timer: null,
+  };
+  ligarExploracao(s);
+  return s;
 }
 
 function desenharSpark(m, serie) {
@@ -221,6 +236,69 @@ function desenharSpark(m, serie) {
   const d = caminhoSuave(paraPontos(serie, s.w, s.h, 8));
   s.linha.setAttribute('d', d);
   s.area.setAttribute('d', `${d} L ${s.w} ${s.h} L 0 ${s.h} Z`);
+  atualizarDicaSpark(s);
+}
+
+/* ---------- Minigráficos interativos: preço e horário nas últimas 24 h ---------- */
+function atualizarDicaSpark(s) {
+  const n = s.valores.length;
+  if (s.t === null || n < 2 || !s.linha.getAttribute('d')) {
+    s.mira.hidden = s.dica.hidden = true;
+    s.el.classList.remove('explorando');
+    return;
+  }
+  const i = Math.round(s.t * (n - 1));
+  const t = i / (n - 1);
+
+  s.el.classList.add('explorando');
+  s.mira.hidden = false;
+  s.mira.style.left = t * 100 + '%';
+  s.ponto.style.top = (yNaCurva(t * s.w, s.linha) / s.h) * 100 + '%';
+
+  s.dica.querySelector('strong').textContent = brl(s.valores[i]);
+  s.dica.querySelector('span').textContent = i === n - 1 ? 'agora' : rotuloTempo(s.tempos[i], '1D');
+
+  // a dica acompanha o cursor sem passar das bordas do minigráfico
+  s.dica.hidden = false;
+  const largura = s.el.clientWidth;
+  const meia = s.dica.offsetWidth / 2;
+  s.dica.style.left = (meia * 2 >= largura ? largura / 2 : Math.min(largura - meia, Math.max(meia, t * largura))) + 'px';
+}
+
+function ligarExploracao(s) {
+  const el = s.el;
+  el.tabIndex = 0;
+  const explorarSpark = (e) => {
+    clearTimeout(s.timer);
+    const r = el.getBoundingClientRect();
+    s.t = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    atualizarDicaSpark(s);
+  };
+  const parar = (atraso = 0) => {
+    clearTimeout(s.timer);
+    s.timer = setTimeout(() => {
+      s.t = null;
+      atualizarDicaSpark(s);
+    }, atraso);
+  };
+  el.addEventListener('pointermove', explorarSpark);
+  el.addEventListener('pointerdown', explorarSpark);
+  el.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && parar());
+  el.addEventListener('pointerup', (e) => e.pointerType !== 'mouse' && parar(1500));
+  el.addEventListener('pointercancel', () => parar(800));
+  el.addEventListener('blur', () => parar());
+  el.addEventListener('keydown', (e) => {
+    const n = s.valores.length;
+    if (n < 2) return;
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      const passo = 1 / (n - 1);
+      s.t = Math.min(1, Math.max(0, (s.t ?? 1) + (e.key === 'ArrowRight' ? passo : -passo)));
+      atualizarDicaSpark(s);
+    } else if (e.key === 'Escape') {
+      parar();
+    }
+  });
 }
 
 function renderMoedas(lista) {
@@ -235,7 +313,7 @@ function renderMoedas(lista) {
       <div class="coin-logo">${logoHTML(m)}</div>
       <div class="coin-body">
         <h3 class="coin-name" style="color:${MOEDAS[m].cor.texto}">${MOEDAS[m].simbolo}</h3>
-        <div class="spark" data-spark="${m}"></div>
+        <div class="spark" data-spark="${m}" role="img" aria-label="Preço do ${MOEDAS[m].simbolo} nas últimas 24 horas"></div>
       </div>
       <div class="coin-info">
         <span class="up" id="pct-${m}">+ 0,00%</span>
@@ -274,6 +352,10 @@ async function carregarHistorico(periodo, forcar = false) {
   guardarHistoricos();
   return h;
 }
+
+// o período do gráfico grande e, para os minigráficos dos cartões, o último dia
+const carregarPeriodos = (forcar = false) =>
+  Promise.all([carregarHistorico(periodoAtual, forcar), periodoAtual !== '1D' && carregarHistorico('1D', forcar)]);
 
 /* ---------- Saldo / Período ---------- */
 const balanceValue = document.getElementById('balanceValue');
@@ -331,15 +413,23 @@ function atualizarTela() {
   balanceVar.classList.toggle('down', variacao < 0);
   balanceVar.querySelector('svg').style.transform = variacao >= 0 ? 'none' : 'rotate(90deg)';
 
-  // cartões das moedas: preço atual e variação no período escolhido
+  // cartões das moedas: preço atual, variação e minigráfico das últimas 24 h
+  // (sempre o último dia, qualquer que seja o período do gráfico grande)
+  const dia = historicos[chaveHistorico('1D', lista)];
   lista.forEach((m) => {
-    const s = series[m];
+    document.getElementById(`preco-${m}`).textContent = brl(precos[m]);
+    if (!dia || !dia.series[m]) return;
+    const s = dia.series[m].slice();
+    s[s.length - 1] = precos[m];
     const p = ((s[s.length - 1] - s[0]) / s[0]) * 100;
     const elPct = document.getElementById(`pct-${m}`);
     elPct.textContent = pct(p);
     elPct.classList.toggle('up', p >= 0);
     elPct.classList.toggle('down', p < 0);
-    document.getElementById(`preco-${m}`).textContent = brl(precos[m]);
+    if (!sparks[m]) return;
+    sparks[m].valores = s;
+    sparks[m].tempos = dia.tempos.slice();
+    sparks[m].tempos[sparks[m].tempos.length - 1] = Date.now();
     desenharSpark(m, normalizar(suavizar(s, 16)));
   });
 
@@ -395,7 +485,7 @@ Cotacoes.assinar(async (dados, fonte) => {
   if (primeiraCotacao) {
     primeiraCotacao = false;
     marcarAoVivo(fonte);
-    await carregarHistorico(periodoAtual);
+    await carregarPeriodos();
   }
   agendarTela();
 });
@@ -403,13 +493,13 @@ Cotacoes.assinar(async (dados, fonte) => {
 // o gráfico do período também anda: o histórico é recarregado a cada minuto
 setInterval(() => {
   if (!Cotacoes.fonteAtual() || Cotacoes.fonteAtual() === 'simulado' || document.hidden) return;
-  carregarHistorico(periodoAtual, true).then(agendarTela).catch(() => {});
+  carregarPeriodos(true).then(agendarTela).catch(() => {});
 }, 60000);
 
 // a carteira mudou (swap ou envio em outra aba): busca o histórico das moedas novas e redesenha
 Estado.aoMudar(() => {
   renderMoedas(Estado.moedasComSaldo());
-  if (Cotacoes.fonteAtual()) carregarHistorico(periodoAtual).then(agendarTela);
+  if (Cotacoes.fonteAtual()) carregarPeriodos().then(agendarTela);
 });
 
 balanceValue.classList.add('carregando');

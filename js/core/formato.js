@@ -2,7 +2,7 @@
    KYLRO - Formatação de valores (padrão brasileiro)
    =========================== */
 
-import { MOEDAS } from './moedas.js?v=20261127e';
+import { MOEDAS } from './moedas.js?v=20261127f';
 
 export const brl = (n) =>
   'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

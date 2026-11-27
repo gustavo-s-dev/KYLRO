@@ -4,10 +4,10 @@
    verde quando a moeda subiu nas últimas 24 h, vermelho quando caiu.
    =========================== */
 
-import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127e';
-import * as Estado from './core/estado.js?v=20261127e';
-import * as Cotacoes from './core/cotacoes.js?v=20261127e';
-import { brl, pct, qtd } from './core/formato.js?v=20261127e';
+import { MOEDAS, logoHTML } from './core/moedas.js?v=20261127f';
+import * as Estado from './core/estado.js?v=20261127f';
+import * as Cotacoes from './core/cotacoes.js?v=20261127f';
+import { brl, pct, qtd } from './core/formato.js?v=20261127f';
 
 const lista = document.getElementById('lista');
 const qtdEl = document.getElementById('qtd');
