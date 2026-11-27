@@ -396,6 +396,42 @@ svg {
   color: #ff5c70;
 }
 
+
+/* ===== COTAÇÕES AO VIVO ===== */
+.balance-value strong { transition: color .9s ease; font-variant-numeric: tabular-nums; }
+.balance-value strong.carregando { opacity: .55; animation: saldo-carregando 1.2s ease-in-out infinite alternate; }
+.balance-value strong.sobe { animation: saldo-sobe 1.1s ease; }
+.balance-value strong.desce { animation: saldo-desce 1.1s ease; }
+@keyframes saldo-carregando { to { opacity: .25; } }
+@keyframes saldo-sobe { 0%, 30% { color: #6dffa0; } 100% { color: #fff; } }
+@keyframes saldo-desce { 0%, 30% { color: #ff8a98; } 100% { color: #fff; } }
+
+.ao-vivo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+}
+.ao-vivo i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.ao-vivo[data-estado="vivo"] i { background: var(--green); animation: ao-vivo-pulso 1.6s ease-out infinite; }
+.ao-vivo[data-estado="atrasado"] i { background: #ffc84a; }
+.ao-vivo[data-estado="simulado"] i { background: #ff5b6e; }
+@keyframes ao-vivo-pulso {
+  0% { box-shadow: 0 0 0 0 rgba(46, 224, 106, .6); }
+  100% { box-shadow: 0 0 0 7px rgba(46, 224, 106, 0); }
+}
+
+.coin-info span { font-variant-numeric: tabular-nums; }
+.coin-info .down { color: #ff5b6e; font-weight: 600; }
+.coin-info small { font-variant-numeric: tabular-nums; }
+
 /* ===== RESPONSIVO ===== */
 @media (max-width: 1100px) {
   .app { grid-template-columns: 200px 1fr; }
@@ -405,6 +441,10 @@ svg {
   /* notificação e usuário continuam no topo direito, como no desktop */
   .app { position: relative; }
   .market-top { position: absolute; top: 22px; right: 30px; z-index: 2; }
+  /* sem espaço sobrando: as linhas não esticam para encher a altura da tela */
+  .app { min-height: 0; align-content: start; }
+  .main { min-height: 640px; } /* altura própria: o gráfico não cobre os botões */
+  .coins { justify-content: flex-start; }
 }
 
 @media (max-width: 700px) {
@@ -423,6 +463,110 @@ svg {
   /* telas bem estreitas: ícones numa linha própria acima do logo */
   .sidebar { padding-top: 64px; }
   .market-top { top: 16px; right: 16px; }
+}
+
+/* ===== CELULAR: tamanhos de app, fáceis de tocar (só até 700px; o PC não muda) ===== */
+@media (max-width: 700px) {
+  body { padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)); }
+  .app { min-height: 0; }
+
+  /* topo: logo à esquerda, notificação e usuário à direita, na mesma linha */
+  .sidebar { padding: 20px 20px 18px; }
+  .brand { text-align: left; margin-bottom: 0; }
+  .logo { font-size: 30px; letter-spacing: 5px; }
+  .tagline { font-size: 11px; margin-top: 6px; }
+  .market-top { top: 18px; right: 12px; gap: 4px; }
+  .icon-btn { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; }
+  .icon-btn svg { width: 28px; height: 28px; }
+  .badge { top: 8px; right: 9px; }
+
+  /* menu vira a barra de navegação fixa embaixo, como num app */
+  .menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    gap: 2px;
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: #4509b8;
+    border-radius: 18px 18px 0 0;
+    box-shadow: 0 -10px 30px rgba(10, 0, 40, .45);
+  }
+  .menu-item {
+    flex: 1;
+    min-width: 0;
+    min-height: 56px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 12px;
+    opacity: .72;
+  }
+  .menu-item span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .menu-item svg { width: 24px; height: 24px; }
+  .menu-item:hover { transform: none; }
+  .menu-item.active { opacity: 1; background: rgba(255, 255, 255, .14); font-weight: 600; }
+  /* "Configurações" não cabe na barra: no celular aparece como "Ajustes" */
+  .menu-item[href="configuracoes.html"] span { font-size: 0; }
+  .menu-item[href="configuracoes.html"] span::after { content: "Ajustes"; font-size: 11px; }
+
+  /* saldo */
+  .main { padding: 26px 20px 0; min-height: 0; border-radius: 18px; }
+  .welcome h2 { font-size: 21px; }
+  .welcome p { font-size: 15px; margin-top: 8px; }
+  .balance { margin-top: 28px; }
+  .balance-top { gap: 10px 14px; }
+  .balance-top h3 { font-size: 22px; }
+  .eye { width: 44px; height: 44px; }
+  .eye svg { width: 26px; height: 26px; }
+  .ranges { width: 100%; gap: 10px; }
+  .range { flex: 1; height: 40px; font-size: 14px; border-radius: 10px; }
+  .balance-value { margin-top: 18px; gap: 16px; flex-wrap: wrap; }
+  .balance-value strong { font-size: 32px; }
+  .variation { font-size: 16px; }
+  .actions { gap: 12px; margin-top: 22px; }
+  .btn { flex: 1; justify-content: center; gap: 10px; height: 54px; padding: 0 16px; font-size: 16px; border-radius: 14px; }
+  .btn svg { width: 20px; height: 20px; }
+
+  /* gráfico logo abaixo dos botões, sem passar por trás deles */
+  .chart { position: relative; height: 210px; margin: 18px -20px 0; }
+
+  /* moedas em cartões */
+  .market { padding: 22px 16px 24px; background: none; }
+  .coins { gap: 12px; margin-top: 0; }
+  .coin {
+    grid-template-columns: 44px 1fr auto;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 16px;
+  }
+  .coin-logo { width: 44px; height: 44px; margin-top: 0; }
+  .coin-logo.btc { font-size: 24px; }
+  .coin-logo.sol { width: 40px; height: 32px; justify-self: center; }
+  .coin-name { text-align: left; font-size: 16px; }
+  .spark { height: 44px; margin-top: 4px; }
+  .coin-info { margin-top: 0; padding-left: 0; font-size: 15px; }
+  .coin-info small { font-size: 13px; }
+
+  /* janelas e painéis com toques confortáveis */
+  .pop-painel { top: calc(100% + 8px); }
+  .pop-links a, .pop-sair { padding: 13px 10px; font-size: 15px; }
+  .modal-btn { height: 50px; font-size: 15px; }
+}
+
+@media (max-width: 360px) {
+  .menu-item, .menu-item[href="configuracoes.html"] span::after { font-size: 10px; }
+  .btn { font-size: 15px; padding: 0 12px; }
+  .coin { grid-template-columns: 38px 1fr auto; gap: 10px; padding: 12px; }
+  .coin-logo { width: 38px; height: 38px; }
 }
 
 /* ===== JANELA "VOCÊ TEM CERTEZA?" (igual à das Configurações) ===== */
