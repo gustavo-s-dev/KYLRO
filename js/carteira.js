@@ -2,11 +2,11 @@
    KYLRO - Carteira
    =========================== */
 
-// ativos de exemplo (simulados)
+// ativos do usuário (mesmas quantidades do dashboard); o valor vem das cotações ao vivo
 const ativos = [
-  { nome: 'Bitcoin', qtd: '0,01 BTC',  valor: 3759.98, icone: 'btc' },
-  { nome: 'AAVE',    qtd: '5,73 AAVE', valor: 3485.77, icone: 'aave' },
-  { nome: 'Solana',  qtd: '5 SOL',     valor: 2279.25, icone: 'sol' }
+  { nome: 'Bitcoin', moeda: 'btc',  qtd: 0.01, simbolo: 'BTC',  icone: 'btc' },
+  { nome: 'AAVE',    moeda: 'aave', qtd: 5.73, simbolo: 'AAVE', icone: 'aave' },
+  { nome: 'Solana',  moeda: 'sol',  qtd: 5,    simbolo: 'SOL',  icone: 'sol' }
 ];
 
 /* ---------- Ícones (img/bitcoin.svg, img/aave.svg, img/solana.svg) ---------- */
@@ -18,16 +18,58 @@ const icones = {
 
 /* ---------- Renderização ---------- */
 const brl = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pctTexto = p => `${p >= 0 ? '+' : '-'} ${Math.abs(p).toFixed(2).replace('.', ',')}%`;
+const qtdTexto = a => `${a.qtd.toLocaleString('pt-BR', { maximumFractionDigits: 8 })} ${a.simbolo}`;
 
-document.getElementById('qtd').textContent =
-  `${ativos.length} ${ativos.length === 1 ? 'ativo' : 'ativos'}`;
+const qtdEl = document.getElementById('qtd');
+const contagem = `${ativos.length} ${ativos.length === 1 ? 'ativo' : 'ativos'}`;
+qtdEl.innerHTML = `<span class="ao-vivo" id="aoVivo" data-estado="carregando"><i></i>carregando</span>${contagem}`;
 
 document.getElementById('lista').innerHTML = ativos.map(a => `
   <article class="item">
     <span class="item-ic">${icones[a.icone]}</span>
     <div class="item-info">
       <h3 class="item-nome">${a.nome}</h3>
-      <p class="item-qtd">${a.qtd}</p>
+      <p class="item-qtd">${qtdTexto(a)}</p>
     </div>
-    <p class="item-valor">${brl(a.valor)}</p>
+    <div class="item-direita">
+      <p class="item-valor carregando" id="valor-${a.moeda}">R$ —</p>
+      <p class="item-var" id="var-${a.moeda}">24 h</p>
+    </div>
   </article>`).join('');
+
+/* ---------- Cotações ao vivo ---------- */
+const ESTADO = { binance: ['vivo', 'ao vivo'], gecko: ['atrasado', 'a cada 30 s'], simulado: ['simulado', 'offline'] };
+const anteriores = {};
+
+Cotacoes.iniciar(ativos.map(a => a.moeda), (dados, fonte) => {
+  const aoVivo = document.getElementById('aoVivo');
+  const [estado, texto] = ESTADO[fonte];
+  aoVivo.dataset.estado = estado;
+  aoVivo.lastChild.textContent = texto;
+
+  ativos.forEach(a => {
+    const d = dados[a.moeda];
+    if (!d) return;
+    const valor = a.qtd * d.preco;
+    const pct = ((d.preco - d.abertura) / d.abertura) * 100;
+    const cor = pct >= 0 ? 'up' : 'down';
+
+    // valor em verde se a moeda subiu nas últimas 24 h, vermelho se caiu
+    const valorEl = document.getElementById(`valor-${a.moeda}`);
+    valorEl.textContent = brl(valor);
+    valorEl.className = `item-valor ${cor}`;
+
+    const varEl = document.getElementById(`var-${a.moeda}`);
+    varEl.textContent = `${pctTexto(pct)} · 24 h`;
+    varEl.className = `item-var ${cor}`;
+
+    // pisca de leve quando o valor muda, como o saldo do início
+    const antes = anteriores[a.moeda];
+    if (antes !== undefined && Math.abs(valor - antes) >= 0.005) {
+      void valorEl.offsetWidth; // reinicia a animação
+      valorEl.classList.add(valor > antes ? 'sobe' : 'desce');
+    }
+    anteriores[a.moeda] = valor;
+  });
+});

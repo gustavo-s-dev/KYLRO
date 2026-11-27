@@ -2,7 +2,8 @@
    KYLRO - Dashboard
    =========================== */
 
-const user = { nome: "Pedro" };
+// nome digitado na tela de entrada (js/nome.js); chega pelo evento "kylro:nome" na primeira visita
+const user = { nome: KylroNome.ler() };
 
 /* ---------- Carteira do usuário (mesmas quantidades da página Carteira) ---------- */
 const CARTEIRA = { btc: 0.01, sol: 5, aave: 5.73 };
@@ -501,8 +502,17 @@ document.querySelectorAll(".menu .menu-item").forEach((item) => {
 });
 
 /* ---------- Início ---------- */
-document.getElementById("greeting").textContent =
-  `Bem-vindo de volta, ${user.nome} !`;
+// saudação, menu da conta e avatar com o nome da pessoa
+function aplicarNome() {
+  document.getElementById("greeting").textContent = user.nome ? `Boas-vindas, ${user.nome}!` : "Boas-vindas!";
+  document.getElementById("popNome").textContent = user.nome;
+  document.getElementById("popAvatar").textContent = user.nome.charAt(0).toLocaleUpperCase("pt-BR");
+}
+window.addEventListener("kylro:nome", (e) => {
+  user.nome = e.detail;
+  aplicarNome();
+});
+aplicarNome();
 iniciarCotacoes(); // saldo, moedas e gráficos com cotações reais, atualizados o tempo todo
 
 /* ---------- Botão Enviar ---------- */
@@ -546,7 +556,8 @@ document.addEventListener("keydown", (e) => {
 });
 
 confirmarSair.addEventListener("click", () => {
-  // simulação: encerra a sessão e recarrega o início
+  // simulação: encerra a sessão (esquece o nome) e recarrega o início, que pergunta o nome de novo
+  KylroNome.apagar();
   confirmarSair.disabled = true;
   cancelarSair.disabled = true;
   confirmarSair.textContent = "Saindo...";
@@ -574,8 +585,6 @@ paineis.forEach(({ btn, painel }) => {
     if (abrir) {
       painel.hidden = false;
       btn.setAttribute("aria-expanded", "true");
-      // o ponto vermelho some depois que as notificações são vistas
-      if (btn.id === "notifBtn") document.getElementById("notifBadge").classList.add("lida");
     }
   });
 });
@@ -587,10 +596,6 @@ document.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") fecharPaineis();
 });
-
-// nome e inicial vêm do mesmo usuário da saudação
-document.getElementById("popNome").textContent = user.nome;
-document.getElementById("popAvatar").textContent = user.nome.charAt(0).toUpperCase();
 
 // "Sair" do menu da conta abre a mesma confirmação
 document.getElementById("popSair").addEventListener("click", () => {

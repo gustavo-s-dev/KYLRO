@@ -149,3 +149,182 @@ html.kylro-abertura::before {
   .splash.ativa .splash-brilho { animation: none; opacity: .7; }
   .splash.saindo .splash-conteudo { animation: none; }
 }
+
+/* ===========================
+   Tela "Olá, como podemos te chamar?" (js/nome.js)
+   Só a pergunta, no mesmo fundo e brilho da entrada (a marca KYLRO fica para a entrada).
+   Tamanhos iguais aos do resto do site: no celular o campo e o botão têm a altura
+   e a letra dos botões Enviar/Receber do início.
+   =========================== */
+.nome-tela {
+  position: fixed;
+  inset: 0;
+  z-index: 101; /* acima da cobertura e da entrada */
+  display: grid;
+  place-items: center;
+  padding: 32px 20px calc(32px + env(safe-area-inset-bottom, 0px));
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: radial-gradient(120% 90% at 50% 40%, #2a0870 0%, #15033c 60%, #0c0124 100%);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.nome-brilho {
+  position: absolute;
+  width: min(720px, 140vw);
+  aspect-ratio: 1;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, .32) 0%, rgba(59, 155, 255, .1) 36%, rgba(59, 155, 255, 0) 66%);
+  transform: translate(-50%, -60%) scale(.85);
+  opacity: 0;
+  pointer-events: none;
+}
+.nome-tela.ativa .nome-brilho { animation: nome-brilho 3s cubic-bezier(.33, 1, .68, 1) forwards; }
+@keyframes nome-brilho {
+  0%   { opacity: 0;  transform: translate(-50%, -60%) scale(.85); }
+  60%  { opacity: 1;  transform: translate(-50%, -60%) scale(1); }
+  100% { opacity: .85; transform: translate(-50%, -60%) scale(1.04); }
+}
+
+.nome-caixa {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* pergunta: "Olá," em cima, a pergunta grande embaixo, com o degradê roxo → azul do gráfico */
+.nome-titulo { display: flex; flex-direction: column; gap: 6px; font-weight: 600; }
+.nome-ola {
+  font-size: 24px;
+  font-weight: 500;
+  color: #c9b8f5;
+}
+.nome-pergunta {
+  font-size: 40px;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+.nome-pergunta em {
+  font-style: normal;
+  background: linear-gradient(90deg, #c7a7ff, #8b9cff 50%, #8fc7ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nome-campo { margin-top: 36px; }
+/* rótulo só para leitores de tela: na tela, a pergunta já diz o que digitar */
+.nome-rotulo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.nome-input {
+  width: 100%;
+  height: 60px;
+  padding: 0 20px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(185, 162, 245, .3);
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
+  font: 500 18px/1 'Poppins', sans-serif;
+  outline: none;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+.nome-input::placeholder { color: rgba(201, 184, 245, .55); }
+.nome-input:focus {
+  border-color: #8b5cf6;
+  background: rgba(255, 255, 255, .09);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, .22);
+}
+.nome-tela.com-erro .nome-input { border-color: #ff5b6e; box-shadow: 0 0 0 4px rgba(255, 91, 110, .16); }
+
+.nome-erro {
+  min-height: 22px;
+  margin-top: 10px;
+  padding-left: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ff8a98;
+}
+
+.nome-btn {
+  width: 100%;
+  height: 60px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #7c3aed, #5b6cff 60%, #3b9bff);
+  color: #fff;
+  font: 700 17px/1 'Poppins', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(91, 108, 255, .35);
+  transition: filter .2s, box-shadow .2s, transform .15s;
+}
+.nome-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+.nome-btn:hover:not(:disabled) { filter: brightness(1.1); }
+.nome-btn:hover:not(:disabled) svg { transform: translateX(3px); }
+.nome-btn:active:not(:disabled) { transform: scale(.98); }
+.nome-btn:focus-visible { outline: 2px solid #c7a7ff; outline-offset: 3px; }
+.nome-btn:disabled { cursor: default; box-shadow: none; filter: saturate(.55) brightness(.8); }
+
+/* entrada da tela: cada parte sobe e aparece, uma depois da outra */
+.nome-ola, .nome-pergunta, .nome-campo, .nome-erro, .nome-btn { opacity: 0; transform: translateY(14px); }
+.nome-tela.ativa :is(.nome-ola, .nome-pergunta, .nome-campo, .nome-erro, .nome-btn) {
+  animation: splash-frase 1s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+.nome-tela.ativa .nome-ola { animation-delay: .15s; }
+.nome-tela.ativa .nome-pergunta { animation-delay: .3s; }
+.nome-tela.ativa .nome-campo,
+.nome-tela.ativa .nome-erro { animation-delay: .5s; }
+.nome-tela.ativa .nome-btn { animation-delay: .6s; }
+
+/* nome recusado: a caixa balança de leve */
+.nome-caixa.treme { animation: nome-treme .4s ease; }
+@keyframes nome-treme {
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(3px); }
+}
+
+/* depois de entrar: a pergunta sobe e some, e a tela se dissolve no roxo da entrada */
+.nome-tela.confirmado { animation: splash-sai .7s cubic-bezier(.65, 0, .35, 1) forwards; pointer-events: none; }
+.nome-tela.confirmado .nome-caixa { animation: splash-conteudo-sai .6s cubic-bezier(.65, 0, .35, 1) forwards; }
+
+/* celular: mesmas medidas do resto do site (margem de 20px, botões de 54px, letra 16px) */
+@media (max-width: 700px) {
+  .nome-tela { padding-bottom: calc(14vh + env(safe-area-inset-bottom, 0px)); } /* um pouco acima do meio, longe do teclado */
+  .nome-ola { font-size: 21px; }
+  .nome-pergunta { font-size: 32px; }
+  .nome-campo { margin-top: 30px; }
+  .nome-input { height: 54px; padding: 0 18px; font-size: 16px; } /* 16px: o iPhone não dá zoom no campo */
+  .nome-erro { font-size: 13px; }
+  .nome-btn { height: 54px; font-size: 16px; }
+}
+@media (max-width: 360px) {
+  .nome-pergunta { font-size: 28px; }
+  .nome-btn { font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nome-tela.ativa :is(.nome-ola, .nome-pergunta, .nome-campo, .nome-erro, .nome-btn) {
+    animation-duration: .01s;
+    animation-delay: 0s;
+  }
+  .nome-tela.ativa .nome-brilho { animation: none; opacity: .7; }
+  .nome-caixa.treme { animation: none; }
+}

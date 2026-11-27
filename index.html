@@ -10,8 +10,9 @@
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <meta name="theme-color" content="#4c0fd0">
 
-  <!-- entrada ao abrir o site: cobre a tela desde o primeiro instante (uma vez por visita) -->
-  <script>try{if(!sessionStorage.getItem("kylroAberturaVista"))document.documentElement.classList.add("kylro-abertura")}catch(e){}</script>
+  <!-- entrada ao abrir o site: cobre a tela desde o primeiro instante (uma vez por visita).
+       Sem nome salvo, antes da entrada aparece a tela "Como podemos te chamar?" -->
+  <script>(function(){var c=document.documentElement.classList,n="",v="";try{n=localStorage.getItem("kylroNome")||""}catch(e){}try{v=sessionStorage.getItem("kylroAberturaVista")||""}catch(e){}if(!n)c.add("kylro-nome","kylro-abertura");else if(!v)c.add("kylro-abertura")})()</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,7 +89,7 @@
     <!-- ===== PRINCIPAL ===== -->
     <main class="main">
       <header class="welcome">
-        <h2 id="greeting">Bem-vindo de volta, Pedro !</h2>
+        <h2 id="greeting">Boas-vindas!</h2>
         <p>O seu patrimônio digital, em um só lugar</p>
       </header>
 
@@ -179,7 +180,6 @@
               <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
               <path d="M13.7 21a2 2 0 0 1-3.4 0" />
             </svg>
-            <i class="badge" id="notifBadge"></i>
           </button>
           <div class="pop-painel" id="popNotif" role="dialog" aria-label="Notificações" hidden>
             <p class="pop-titulo">Notificações</p>
@@ -206,9 +206,9 @@
           </button>
           <div class="pop-painel pop-perfil" id="popPerfil" role="dialog" aria-label="Sua conta" hidden>
             <div class="pop-conta">
-              <span class="pop-avatar" id="popAvatar">P</span>
+              <span class="pop-avatar" id="popAvatar"></span>
               <div>
-                <strong class="pop-nome" id="popNome">Pedro</strong>
+                <strong class="pop-nome" id="popNome"></strong>
                 <span class="pop-verif"><span class="pop-verif-selo"><svg class="pop-verif-ic" viewBox="0 0 8 8" fill="none" aria-hidden="true"><path d="M6.99987 0.202974C7.11764 0.0615339 7.2667 -0.0103531 7.41824 0.00120544C7.56979 0.012764 7.71305 0.106948 7.82035 0.265555C7.92765 0.424162 7.99136 0.635931 7.99918 0.859937C8.007 1.08394 7.95837 1.30428 7.86269 1.47837L7.82046 1.54654L5.72758 4.641L3.63415 7.73464C3.57724 7.81877 3.50968 7.8855 3.43533 7.93103C3.36097 7.97657 3.28128 8 3.20079 8C3.12031 8 3.04062 7.97657 2.96626 7.93103C2.89191 7.8855 2.82435 7.81877 2.76744 7.73464L0.179538 3.91009L0.137314 3.84192C0.0416285 3.66783 -0.00700399 3.44749 0.00081549 3.22349C0.00863497 2.99948 0.0723514 2.78771 0.179651 2.62911C0.28695 2.4705 0.430214 2.37632 0.581756 2.36476C0.733299 2.3532 0.88236 2.42509 1.00013 2.56652L1.04625 2.62894L3.20079 5.81374L6.95375 0.26621L7.00042 0.203796L6.99987 0.202974Z" fill="white"/></svg></span>Conta verificada</span>
               </div>
             </div>
@@ -322,6 +322,7 @@
     </div>
   </div>
 
+  <script src="js/nome.js"></script>
   <script src="js/script.js"></script>
   <script src="js/splash.js"></script>
 </body>

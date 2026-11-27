@@ -67,6 +67,9 @@
     }));
   }
 
+  // a tela do nome (js/nome.js) chama a entrada depois que a pessoa digita o nome
+  window.KylroEntrada = { abrir };
+
   tela.addEventListener('click', fechar);
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') fechar();
@@ -74,7 +77,10 @@
 
 
   /* ---------- Abertura do site (uma vez por visita) ---------- */
-  if (document.documentElement.classList.contains('kylro-abertura')) {
+  // sem nome salvo, quem abre a entrada é a tela do nome, depois que a pessoa entra
+  const esperandoNome = document.documentElement.classList.contains('kylro-nome');
+
+  if (document.documentElement.classList.contains('kylro-abertura') && !esperandoNome) {
     try { sessionStorage.setItem('kylroAberturaVista', '1'); } catch (e) {}
 
     // a animação só começa quando a página terminou de carregar e está ociosa

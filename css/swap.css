@@ -56,7 +56,7 @@ svg {
 /* ===== CARDS ===== */
 .swap-box {
   width: 100%;
-  max-width: 325px;
+  max-width: 345px;
 }
 
 .card {
@@ -87,39 +87,62 @@ svg {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
 }
 
+/* botão da moeda: toque para escolher outra */
 .token {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 133px;
+  gap: 10px;
+  min-width: 133px;
+  max-width: 62%;
   height: 70px;
-  padding: 0 13px;
+  padding: 0 10px 0 13px;
   background: var(--chip);
   border-radius: 7px;
   font-size: 15px;
   font-weight: 700;
+  text-align: left;
+  transition: background .2s;
 }
+.token:hover { background: #3a1694; }
+.token:focus-visible { outline: 2px solid var(--lilac); outline-offset: 2px; }
+.token-nome { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.token-seta { width: 16px; height: 16px; flex-shrink: 0; color: var(--label); stroke-width: 2.6; }
 
-.logo { width: 38px; height: 38px; flex-shrink: 0; }
-
-.logo-btc {
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  background: #f7931a;
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
+/* todos os logos na mesma caixa quadrada, encaixados sem distorcer */
+.logo,
+.opcao-logo {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
 }
-
-.logo svg { width: 100%; height: 100%; stroke: none; }
 
 .amount {
   font-size: 16px;
   font-weight: 700;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.amount .carregando { font-size: 13px; font-weight: 600; color: var(--label); }
+
+.saldo {
+  margin: 12px 0 0 11px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--label);
+}
+
+.taxa {
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--label);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 .sign { margin-right: 6px; font-weight: 700; }
 .sign.neg { color: var(--red); }
@@ -142,7 +165,93 @@ svg {
   width: 38px;
   height: 38px;
   transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
-  transition: transform .4s;
+  transition: transform .4s, opacity .2s;
+}
+/* moeda recebida não está na carteira: não dá para pagar com ela */
+.invert.off { cursor: not-allowed; }
+.invert.off svg { opacity: .35; }
+.invert.nega svg { animation: inverter-nega .4s ease; }
+@keyframes inverter-nega {
+  25% { margin-left: -5px; }
+  75% { margin-left: 5px; }
+}
+
+/* ===== ESCOLHER MOEDA ===== */
+.seletor {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 0, 40, .7);
+  animation: seletor-aparecer .2s ease;
+}
+.seletor[hidden] { display: none; }
+
+.seletor-caixa {
+  width: 100%;
+  max-width: 360px;
+  max-height: min(560px, 100%);
+  display: flex;
+  flex-direction: column;
+  background: #39116d;
+  border-radius: 16px;
+  padding: 18px 12px 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+  animation: seletor-subir .25s ease;
+}
+
+.seletor-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px 12px;
+}
+.seletor-titulo { font-size: 17px; font-weight: 700; }
+.seletor-fechar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--label);
+}
+.seletor-fechar:hover { background: rgba(255, 255, 255, .08); }
+.seletor-fechar svg { width: 20px; height: 20px; }
+
+.seletor-lista { list-style: none; overflow-y: auto; }
+
+.opcao {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  text-align: left;
+  transition: background .15s;
+}
+.opcao:hover,
+.opcao:focus-visible { background: rgba(255, 255, 255, .08); outline: none; }
+.opcao.atual { background: rgba(255, 255, 255, .13); }
+.opcao-logo { width: 30px; height: 30px; }
+.opcao-nome { flex: 1; font-size: 15px; font-weight: 700; }
+.opcao-detalhe { font-size: 13px; font-weight: 600; color: var(--label); font-variant-numeric: tabular-nums; }
+
+@keyframes seletor-aparecer { from { opacity: 0; } to { opacity: 1; } }
+@keyframes seletor-subir { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* no celular a lista sobe de baixo, como num app */
+@media (max-width: 480px) {
+  .seletor { align-items: flex-end; padding: 0; }
+  .seletor-caixa {
+    max-width: none;
+    border-radius: 18px 18px 0 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 /* ===== MÍN / MAX ===== */

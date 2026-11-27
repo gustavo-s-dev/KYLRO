@@ -213,16 +213,6 @@ svg {
 .icon-btn { position: relative; background: none; }
 .icon-btn svg { width: 34px; height: 34px; stroke-width: 2; }
 
-.badge {
-  position: absolute;
-  top: 0;
-  right: 2px;
-  width: 8px;
-  height: 8px;
-  background: #ff2d3d;
-  border-radius: 50%;
-}
-
 .coins {
   flex: 1;
   display: flex;
@@ -281,8 +271,6 @@ svg {
 
 /* ===== PAINÉIS: NOTIFICAÇÕES E CONTA ===== */
 .pop { position: relative; display: flex; }
-
-.badge.lida { display: none; }
 
 .pop-painel {
   position: absolute;
@@ -467,7 +455,10 @@ svg {
 
 /* ===== CELULAR: tamanhos de app, fáceis de tocar (só até 700px; o PC não muda) ===== */
 @media (max-width: 700px) {
-  body { padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)); }
+  /* a altura do body precisa crescer com o conteúdo: com height: 100% o espaço
+     reservado embaixo não entra na rolagem e a barra fixa cobre o último cartão */
+  html, body { height: auto; }
+  body { min-height: 100%; padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   .app { min-height: 0; }
 
   /* topo: logo à esquerda, notificação e usuário à direita, na mesma linha */
@@ -478,7 +469,6 @@ svg {
   .market-top { top: 18px; right: 12px; gap: 4px; }
   .icon-btn { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; }
   .icon-btn svg { width: 28px; height: 28px; }
-  .badge { top: 8px; right: 9px; }
 
   /* menu vira a barra de navegação fixa embaixo, como num app */
   .menu {

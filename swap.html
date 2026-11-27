@@ -24,9 +24,10 @@
       <article class="card card-pay">
         <h2 class="card-label">você paga</h2>
         <div class="card-row">
-          <div class="token" id="payToken"></div>
+          <button type="button" class="token" id="payToken" aria-haspopup="dialog"></button>
           <p class="amount" id="payAmount"></p>
         </div>
+        <p class="saldo" id="saldo"></p>
       </article>
 
       <button class="invert" id="invertBtn" aria-label="Inverter moedas">
@@ -39,10 +40,12 @@
       <article class="card card-receive">
         <h2 class="card-label">você recebe</h2>
         <div class="card-row">
-          <div class="token" id="receiveToken"></div>
+          <button type="button" class="token" id="receiveToken" aria-haspopup="dialog"></button>
           <p class="amount" id="receiveAmount"></p>
         </div>
       </article>
+
+      <p class="taxa" id="taxa" aria-live="polite"></p>
     </section>
 
     <div class="limits">
@@ -64,6 +67,20 @@
     <p class="note">As transações estão sujeitas à cotação do mercado.</p>
   </main>
 
+  <!-- lista para escolher a moeda (preenchida por js/swap.js) -->
+  <div class="seletor" id="seletor" role="dialog" aria-modal="true" aria-labelledby="seletorTitulo" hidden>
+    <div class="seletor-caixa">
+      <header class="seletor-topo">
+        <h2 class="seletor-titulo" id="seletorTitulo"></h2>
+        <button type="button" class="seletor-fechar" aria-label="Fechar">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+        </button>
+      </header>
+      <ul class="seletor-lista" id="seletorLista"></ul>
+    </div>
+  </div>
+
+  <script src="js/cotacoes.js"></script>
   <script src="js/swap.js"></script>
 </body>
 </html>
